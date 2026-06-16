@@ -1,3 +1,60 @@
 language: vi
 output_dir: outputs/reports
 format: markdown
+
+sections:
+  - id: executive_summary
+    title: "Tóm tắt kết luận"
+    enabled: true
+  - id: data_sources
+    title: "Nguồn dữ liệu và mức độ kiểm chứng"
+    enabled: true
+  - id: provenance_breakdown
+    title: "Phân tách provenance: paper_reported / hf_reported / local_verified / llm_inferred"
+    enabled: true
+  - id: term_coverage_overview
+    title: "Tổng quan coverage 889 thuật ngữ CS"
+    enabled: true
+  - id: entity_category_analysis
+    title: "Phân loại term theo entity category"
+    enabled: true
+  - id: domain_analysis
+    title: "Phân loại term theo medical domain"
+    enabled: true
+  - id: frequency_analysis
+    title: "Term phổ biến, term hiếm, term hard-only"
+    enabled: true
+  - id: external_comparison
+    title: "Đối chiếu với external medical term inventory"
+    enabled: true
+  - id: asr_baseline_results
+    title: "Kết quả ASR baseline tổng thể"
+    enabled: true
+    requires_outputs:
+      - outputs/asr_eval/metrics_summary.csv
+  - id: asr_cs_term_results
+    title: "Kết quả ASR trên CS terms"
+    enabled: true
+    requires_outputs:
+      - outputs/asr_eval/errors/top_failed_terms.csv
+  - id: asr_error_analysis
+    title: "Phân tích lỗi ASR theo entity category và domain"
+    enabled: true
+    requires_outputs:
+      - outputs/asr_eval/errors/asr_error_taxonomy.csv
+  - id: error_examples
+    title: "Ví dụ lỗi tiêu biểu"
+    enabled: true
+    requires_outputs:
+      - outputs/asr_eval/errors/asr_error_taxonomy.csv
+  - id: coverage_assessment
+    title: "Đánh giá dataset hiện tại cover tốt/chưa tốt ở đâu"
+    enabled: true
+  - id: recommendations
+    title: "Kết luận và khuyến nghị cho VietMedVoice"
+    enabled: true
+  - id: limitations
+    title: "Giới hạn của phân tích"
+    enabled: true
+
+asr_section_policy: "skip_with_disclaimer"

@@ -1,0 +1,10 @@
+{# Phân loại term theo medical domain - Domain Analysis #}
+{% if domain_summary.empty %}
+*Chưa có dữ liệu domain summary.*
+{% else %}
+| Medical Domain | Số lượng | Tỷ lệ (%) |
+|-----------------|----------|-----------|
+{% for row in domain_summary.to_dict('records') %}
+| `{{ row.get('medical_domain', 'unknown') }}` | {{ row.get('count', 0) }} | {{ row.get('percentage', 0) }}% |
+{% endfor %}
+{% endif %}

@@ -1,0 +1,18 @@
+{# Kết quả ASR baseline tổng thể - ASR Baseline Results #}
+{% if not asr_metrics_available %}
+> **Trạng thái ASR Evaluation: PENDING**
+> 
+> Các phần liên quan đến ASR evaluation chưa được generate do Phase 4 chưa hoàn thành.
+{% elif asr_metrics.empty %}
+> **Không có dữ liệu ASR metrics.**
+{% else %}
+### Tổng quan Metrics ASR Baseline
+
+{% for row in asr_metrics.to_dict('records') %}
+{% for col, val in row.items() %}
+{% if col not in ['split', 'metric'] %}
+- **{{ col }}**: {{ val }}
+{% endif %}
+{% endfor %}
+{% endfor %}
+{% endif %}

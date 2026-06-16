@@ -1,0 +1,20 @@
+{# Ví dụ lỗi tiêu biểu - Error Examples #}
+{% if not asr_errors_available %}
+> **Trạng thái ASR Evaluation: PENDING**
+> 
+> Các phần liên quan đến ASR evaluation chưa được generate do Phase 4 chưa hoàn thành.
+{% elif asr_errors.empty %}
+> **Không có dữ liệu ASR errors để hiển thị ví dụ.**
+{% else %}
+### Ví dụ lỗi tiêu biểu
+
+Các ví dụ dưới đây minh họa các lỗi ASR phổ biến trên CS medical terms:
+
+{% for row in asr_errors.head(5).to_dict('records') %}
+**Term: `{{ row.get('term', '') }}`**
+- Expected: `{{ row.get('expected', '') }}`
+- Got: `{{ row.get('recognized', '') }}`
+- Error Type: {{ row.get('error_type', '') }}
+
+{% endfor %}
+{% endif %}

@@ -1,0 +1,40 @@
+{# Term phổ biến, term hiếm, term hard-only - Frequency Analysis #}
+### Term phổ biến (common, ≥20 lần xuất hiện)
+
+{% if common_terms.empty %}
+*Không có term phổ biến.*
+{% else %}
+| Term | Occurrences | Entity Category |
+|------|------------|-----------------|
+{% for row in common_terms.head(20).to_dict('records') %}
+| `{{ row.get('normalized_term', '') }}` | {{ row.get('occurrence_count', 0) }} | `{{ row.get('entity_category', 'unknown') }}` |
+{% endfor %}
+{% endif %}
+
+### Term hiếm (rare, <5 lần xuất hiện)
+
+{% if rare_terms.empty %}
+*Không có term hiếm.*
+{% else %}
+Tổng số term hiếm: **{{ rare_terms|length }}**
+
+| Term | Occurrences | Entity Category |
+|------|------------|-----------------|
+{% for row in rare_terms.head(10).to_dict('records') %}
+| `{{ row.get('normalized_term', '') }}` | {{ row.get('occurrence_count', 0) }} | `{{ row.get('entity_category', 'unknown') }}` |
+{% endfor %}
+{% endif %}
+
+### Term hard-only (chỉ xuất hiện trong tập hard)
+
+{% if hard_terms.empty %}
+*Không có term hard-only.*
+{% else %}
+Tổng số term hard-only: **{{ hard_terms|length }}**
+
+| Term | Occurrences |
+|------|------------|
+{% for row in hard_terms.head(10).to_dict('records') %}
+| `{{ row.get('normalized_term', '') }}` | {{ row.get('occurrence_count', 0) }} |
+{% endfor %}
+{% endif %}

@@ -1,0 +1,17 @@
+{# Nguồn dữ liệu và mức độ kiểm chứng - Data Sources Section #}
+### Provenance Categories
+
+| Mức độ | Mô tả | Nguồn |
+|--------|--------|--------|
+| **paper_reported** | Giá trị được công bố trong paper/dataset card | VietMedVoice paper, Hugging Face dataset card |
+| **hf_reported** | Giá trị từ Hugging Face metadata | HF repo metadata |
+| **local_verified** | Giá trị được xác minh từ file cục bộ | Local audit outputs |
+| **llm_inferred** | Giá trị suy luận từ LLM structured output | OpenAI API (confidence flags) |
+
+### Áp dụng trong báo cáo này
+
+- **Statistics về dataset**: `local_verified` từ Phase 0-1 audit
+- **Term counts**: `local_verified` từ Phase 2 extraction
+- **Entity/Domain classification**: `llm_inferred` từ Phase 3 (chế độ mock)
+- **ASR metrics**: `local_verified` từ Phase 4 evaluation
+- **External coverage**: `llm_inferred` (matching logic) + `paper_reported` (reference sources)

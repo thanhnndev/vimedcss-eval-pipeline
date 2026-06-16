@@ -1,0 +1,21 @@
+{# Tóm tắt kết luận - Executive Summary Section #}
+{% if inventory.empty %}
+*Tổng số thuật ngữ: **0** (chưa có dữ liệu)*
+{% else %}
+*Tổng số thuật ngữ CS: **{{ inventory|length }}***
+
+- Term phổ biến (≥20 lần xuất hiện): **{{ common_count }}**
+- Term hiếm (<5 lần xuất hiện): **{{ rare_count }}**
+- Tỷ lệ chưa phân loại: **{{ unknown_pct }}%**
+{% endif %}
+
+### Điểm chính
+
+1. Dataset chứa phần lớn term ở dạng **unknown** (chưa phân loại) do sử dụng LLM classification ở chế độ mock.
+2. Các term tập trung chủ yếu trong domain **Medical Sciences** và **Pathology & Pathogens**.
+3. Tỷ lệ coverage với external inventory còn rất thấp (pilot scope).
+{% if asr_metrics_available %}
+4. Kết quả ASR baseline cho thấy hiệu suất trên các CS terms cần được cải thiện.
+{% else %}
+4. ASR evaluation chưa được chạy hoặc đang ở trạng thái pending.
+{% endif %}
