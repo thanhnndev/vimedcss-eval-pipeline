@@ -7,7 +7,7 @@ This roadmap details the phases to implement a complete pipeline evaluating medi
 ## Phases
 
 - [x] **Phase 1: CS Term Extraction & Normalization** - Extract unique terms and save normalized dictionary.
-- [ ] **Phase 2: Term Taxonomy & LLM Classification** - Call LLM to classify terms into entity categories and medical domains.
+- [x] **Phase 2: Term Taxonomy & LLM Classification** - Call LLM to classify terms into entity categories and medical domains.
 - [ ] **Phase 3: External Reference Match** - Match terms against ICD-10, ATC, and Meddict reference lexicons.
 - [ ] **Phase 4: ASR Baseline Evaluation** - Run faster-whisper transcribing and compute WER/CER/CS metrics.
 - [ ] **Phase 5: Vietnamese Report Generation** - Generate final markdown report in Vietnamese.
@@ -39,7 +39,7 @@ Plans:
 **Plans**: 1 plan
 
 Plans:
-- [ ] 02-01: Develop LLM-based structured classifier and audit logging.
+- [x] 02-01: Develop LLM-based structured classifier and audit logging.
 
 ### Phase 3: External Reference Match
 **Goal**: Match ViMedCSS terms against external medical dictionaries (ICD-10, ATC, Meddict) to calculate dataset coverage rates.
@@ -88,7 +88,7 @@ Plans:
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
 | 1. CS Term Extraction | 1/1 | Complete | 2026-06-16 |
-| 2. LLM Classification | 0/1 | Not started | - |
+| 2. LLM Classification | 1/1 | Complete | 2026-06-16 |
 | 3. External Match | 0/1 | Not started | - |
 | 4. ASR Evaluation | 0/2 | Not started | - |
 | 5. Report Generation | 0/1 | Not started | - |

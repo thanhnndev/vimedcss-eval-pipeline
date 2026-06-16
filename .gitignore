@@ -65,3 +65,4 @@ logs/
 .env
 .env.*
 secrets.yaml
+!.env.example

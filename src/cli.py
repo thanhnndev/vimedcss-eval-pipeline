@@ -23,6 +23,11 @@ def main():
     # Extract terms command
     subparsers.add_parser("extract-terms", help="Extract and normalize code-switching medical terms from metadata")
     
+    # Classify terms command
+    classify_parser = subparsers.add_parser("classify-terms", help="Classify unique code-switching medical terms using LLM")
+    classify_parser.add_argument("--mock", action="store_true", help="Use mock classification without calling OpenAI API")
+    classify_parser.add_argument("--limit", type=int, default=None, help="Limit the number of terms to classify (useful for testing)")
+    
     args = parser.parse_args()
     
     if not args.command:
@@ -76,6 +81,25 @@ def main():
             print(f"Inventory saved at: outputs/term_coverage/cs_terms_inventory.csv")
         except Exception as e:
             logger.error(f"Extract terms failed: {e}")
+            sys.exit(1)
+
+    elif args.command == "classify-terms":
+        logger.info("Starting code-switching term taxonomy classification...")
+        try:
+            from src.llm.classifier import TermClassifier
+            classifier = TermClassifier(
+                config.get_dataset_config(),
+                config.get_taxonomy_config(),
+                config.get_llm_config()
+            )
+            stats = classifier.classify(mock=args.mock, limit=args.limit)
+            logger.info("Term taxonomy classification completed successfully!")
+            print(f"Total unique terms classified: {stats['total_classified']}")
+            print(f"Terms requiring human review: {stats['needs_human_review_count']}")
+            print(f"Audit log: outputs/term_coverage/llm_classification_audit.jsonl")
+            print(f"Summary generated at: outputs/term_coverage/term_taxonomy_summary.md")
+        except Exception as e:
+            logger.error(f"Classify terms failed: {e}")
             sys.exit(1)
 
 if __name__ == "__main__":

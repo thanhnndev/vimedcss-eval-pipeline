@@ -5,30 +5,30 @@
 See: .planning/PROJECT.md (updated 2026-06-16)
 
 **Core value:** Accurate, traceable medical term coverage analysis and ASR error taxonomy for English/Vietnamese code-switching data to guide future dataset construction.
-**Current focus:** Phase 2: Term Taxonomy & LLM Classification
+**Current focus:** Phase 3: External Reference Match
  
 ## Current Position
  
-Phase: 2 of 5 (Term Taxonomy & LLM Classification)
+Phase: 3 of 5 (External Reference Match)
 Plan: 0 of 1 in current phase
 Status: Ready to plan
-Last activity: 2026-06-16 — Completed Phase 1: CS Term Extraction & Normalization.
+Last activity: 2026-06-16 — Completed Phase 2: Term Taxonomy & LLM Classification.
  
-Progress: [▓░░░░░░░░░] 20%
+Progress: [▓▓░░░░░░░░] 40%
  
 ## Performance Metrics
  
 **Velocity:**
-- Total plans completed: 1
+- Total plans completed: 2
 - Average duration: 15 min
-- Total execution time: 0.25 hours
+- Total execution time: 0.50 hours
  
 **By Phase:**
  
 | Phase | Plans | Total | Avg/Plan |
 |-------|-------|-------|----------|
 | 1. CS Term Extraction | 1/1 | 0.25h | 15 min |
-| 2. LLM Classification | 0/1 | - | - |
+| 2. LLM Classification | 1/1 | 0.25h | 15 min |
 | 3. External Match | 0/1 | - | - |
 | 4. ASR Evaluation | 0/2 | - | - |
 | 5. Report Generation | 0/1 | - | - |
