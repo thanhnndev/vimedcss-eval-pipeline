@@ -1,0 +1,67 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# Virtual Environment
+.venv/
+venv/
+ENV/
+env/
+/bin/
+/lib/
+/include/
+/share/
+
+# IDEs
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Project specific
+# Ignore raw data but keep folder structures
+data/raw/*
+!data/raw/.gitkeep
+data/interim/*
+!data/interim/.gitkeep
+data/processed/*
+!data/processed/.gitkeep
+
+# Ignore outputs but keep folder structures
+outputs/audit/*
+!outputs/audit/.gitkeep
+outputs/term_coverage/*
+!outputs/term_coverage/.gitkeep
+outputs/asr_eval/*
+!outputs/asr_eval/.gitkeep
+outputs/reports/*
+!outputs/reports/.gitkeep
+
+# Logs
+*.log
+logs/
+
+# Env & Secrets
+.env
+.env.*
+secrets.yaml

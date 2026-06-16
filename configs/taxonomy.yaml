@@ -1,0 +1,8 @@
+frequency_buckets:
+  singleton: [1, 1]
+  rare: [2, 4]
+  medium: [5, 19]
+  common: [20, null]
+allow_unknown: true
+allow_multi_label: true
+confidence_threshold_review: 0.80

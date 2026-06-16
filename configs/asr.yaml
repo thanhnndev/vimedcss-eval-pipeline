@@ -1,0 +1,14 @@
+enabled: true
+run_mode: sample_first
+sample_size: 100
+splits:
+  - test
+  - hard
+models:
+  - name: whisper_large_v3
+    type: whisper
+    model_id: large-v3
+normalization:
+  lowercase: true
+  keep_medical_abbreviations: true
+  keep_numbers_units: true

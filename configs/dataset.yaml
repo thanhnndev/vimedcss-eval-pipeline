@@ -1,0 +1,18 @@
+repo_id: tensorxt/ViMedCSS
+revision: null
+local_raw_dir: data/raw/vimedcss
+metadata_only: true
+expected_fields:
+  segment_id: segment_id
+  transcript: segment_text
+  cs_terms: cs_terms_list
+  topic: topic
+  audio: audio
+  start: start
+  end: end
+  duration: duration
+splits:
+  - train
+  - validation
+  - test
+  - hard

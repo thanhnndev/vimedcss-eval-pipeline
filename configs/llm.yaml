@@ -1,0 +1,8 @@
+enabled: true
+provider: openai
+model: gpt-5-mini
+structured_output: true
+batch_size: 50
+max_retries: 3
+save_raw_io: true
+redact_sensitive: true

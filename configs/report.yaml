@@ -1,0 +1,3 @@
+language: vi
+output_dir: outputs/reports
+format: markdown
