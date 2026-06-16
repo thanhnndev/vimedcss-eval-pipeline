@@ -66,3 +66,4 @@ logs/
 .env.*
 secrets.yaml
 !.env.example
+outputs/plots/*.png
