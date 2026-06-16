@@ -4,8 +4,12 @@
 all: help
 
 help:
-	@echo "ViMedCSS Evaluation Pipeline - Commands:"
+	@echo "ViMedCSS Evaluation Pipeline"
+	@echo ""
+	@echo "Setup:"
 	@echo "  make install         - Install required Python dependencies inside virtual environment"
+	@echo ""
+	@echo "Pipeline:"
 	@echo "  make download        - Download dataset metadata from Hugging Face"
 	@echo "  make audit           - Run metadata schema checks and statistics audit"
 	@echo "  make terms           - Extract and normalize code-switching medical terms"
@@ -16,6 +20,8 @@ help:
 	@echo "  make asr             - Run ASR baseline evaluation (Phase 4 - coming soon)"
 	@echo "  make report          - Generate Vietnamese final report (Phase 5 - coming soon)"
 	@echo "  make pipeline        - Run full pipeline: download -> audit -> terms -> classify -> external"
+	@echo ""
+	@echo "Utilities:"
 	@echo "  make test            - Run all pytest unit tests"
 	@echo "  make clean           - Clean python caches, logs, and outputs"
 
