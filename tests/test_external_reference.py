@@ -508,10 +508,13 @@ min_commonness_for_high_priority: 3
         matcher.output_dir = str(term_dir)
         matcher.inventory_dir = mock_dir
         
-        stats = matcher.run()
+        # Test with limit=2
+        stats = matcher.run(limit=2)
         
         assert os.path.exists(matcher.registry_path)
         assert os.path.exists(matcher.external_inventory_path)
         assert os.path.exists(matcher.coverage_path)
         assert os.path.exists(matcher.summary_path)
         assert "coverage_ratio" in stats
+        # With limit=2, total ViMedCSS terms should be 2
+        assert stats["vimedcss_covered_count"] <= 2

@@ -123,7 +123,7 @@ def main():
                 mock_inv_path = ExternalReferenceMatcher.build_mock_inventory(mock_dir)
                 matcher.inventory_dir = mock_dir
                 logger.info(f"Mock mode: using synthetic inventory at {mock_inv_path}")
-            stats = matcher.run()
+            stats = matcher.run(limit=args.limit)
             logger.info("External reference matching completed successfully!")
             print(f"External term count: {stats['external_term_count']}")
             print(f"ViMedCSS covered count: {stats['vimedcss_covered_count']}")

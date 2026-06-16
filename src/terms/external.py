@@ -48,8 +48,11 @@ class ExternalReferenceMatcher:
         self.coverage_path = os.path.join(self.output_dir, "vimedcss_vs_external_coverage.csv")
         self.summary_path = os.path.join(self.output_dir, "external_coverage_summary.md")
     
-    def run(self) -> Dict[str, Any]:
+    def run(self, limit: int = None) -> Dict[str, Any]:
         """Execute the full external reference matching pipeline.
+        
+        Args:
+            limit: Optional limit on number of ViMedCSS terms to process (for testing).
         
         Returns:
             dict of statistics: external_term_count, vimedcss_covered_count,
@@ -65,6 +68,11 @@ class ExternalReferenceMatcher:
         
         # 3. Load ViMedCSS terms
         vimedcss_df = self._load_vimedcss_inventory()
+        
+        # Apply limit if specified
+        if limit is not None and limit > 0:
+            vimedcss_df = vimedcss_df.head(limit)
+            logger.info(f"Limit applied: processing only {len(vimedcss_df)} ViMedCSS terms.")
         
         # 4. Match terms
         matched_df = self._match_terms(vimedcss_df, external_df)
