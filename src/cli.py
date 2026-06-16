@@ -137,5 +137,50 @@ def main():
             logger.error(f"Match external failed: {e}")
             sys.exit(1)
 
+    elif args.command == "run-asr":
+        logger.info("Starting ASR baseline transcription...")
+        try:
+            from src.asr.transcriber import ASRTranscriber
+            transcriber = ASRTranscriber(
+                config.get_dataset_config(),
+                config.get_asr_config(),
+            )
+            stats = transcriber.run(mock=args.mock, limit=args.limit)
+            logger.info("ASR transcription completed successfully!")
+            print(f"Splits processed: {stats['splits_processed']}")
+            print(f"Segments processed: {stats['segments_processed']}")
+            print(f"Skipped missing audio: {stats['segments_skipped_missing_audio']}")
+            print(f"Skipped corrupt audio: {stats['segments_skipped_corrupt_audio']}")
+            print(f"Output dir: {config.get_asr_config().get('output_dir', 'outputs/asr_eval')}")
+        except Exception as e:
+            logger.error(f"Run ASR failed: {e}")
+            sys.exit(1)
+
+    elif args.command == "eval-asr":
+        logger.info("Starting ASR metrics and error classification...")
+        try:
+            from src.asr.metrics import ASRMetrics
+            from src.asr.error_taxonomy import ASRErrorTaxonomy
+            metrics = ASRMetrics(
+                config.get_dataset_config(),
+                config.get_asr_config(),
+                config.get_taxonomy_config(),
+            )
+            metric_stats = metrics.compute_and_write(mock=args.mock, limit=args.limit)
+            taxonomy = ASRErrorTaxonomy(
+                config.get_dataset_config(),
+                config.get_asr_config(),
+                config.get_taxonomy_config(),
+            )
+            taxonomy_stats = taxonomy.classify_and_write(mock=args.mock, limit=args.limit)
+            logger.info("ASR evaluation completed successfully!")
+            print(f"Metric splits: {metric_stats.get('splits', 0)}")
+            print(f"Failed terms CSV: outputs/asr_eval/errors/top_failed_terms.csv")
+            print(f"Error taxonomy CSV: outputs/asr_eval/errors/asr_error_taxonomy.csv")
+            print(f"Summary: outputs/asr_eval/asr_evaluation_summary.md")
+        except Exception as e:
+            logger.error(f"Eval ASR failed: {e}")
+            sys.exit(1)
+
 if __name__ == "__main__":
     main()

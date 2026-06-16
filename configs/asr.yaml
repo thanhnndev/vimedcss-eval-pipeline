@@ -8,7 +8,22 @@ models:
   - name: whisper_large_v3
     type: whisper
     model_id: large-v3
+device: cpu
+compute_type: int8
+batch_size: 8
+beam_size: 5
+vad_filter: true
 normalization:
   lowercase: true
   keep_medical_abbreviations: true
   keep_numbers_units: true
+audio_verification:
+  expected_extensions:
+    - .wav
+    - .mp3
+    - .flac
+    - .m4a
+    - .ogg
+  min_duration_seconds: 0.5
+  max_duration_seconds: 3600.0
+output_dir: outputs/asr_eval
