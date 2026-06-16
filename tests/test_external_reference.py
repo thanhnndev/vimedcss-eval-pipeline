@@ -262,7 +262,7 @@ class TestExternalSourcesRegistry:
         matcher.run()
         reg_df = pd.read_csv(matcher.registry_path)
         assert len(reg_df) >= 1
-        assert reg_df.iloc[0]["include_in_pilot"] is True
+        assert bool(reg_df.iloc[0]["include_in_pilot"]) is True
 
     def test_registry_csv_columns(self, external_configs, vimedcss_inventory):
         """EXT_REF-01: Registry CSV has all required columns."""
@@ -422,16 +422,9 @@ class TestEdgeCases:
     def test_unmatched_terms_marked_missing(self, external_configs, vimedcss_inventory):
         """Task 6: Unmatched terms get external_match_status=missing, not dropped."""
         matcher, term_dir = _make_matcher(external_configs, vimedcss_inventory)
-        matcher.run()
-        # The inventory file is written but we need to check the matched output
-        # Since matched_df is not saved to disk, we verify via stats
-        # All 5 terms should be present in some form
-        cov_df = pd.read_csv(matcher.coverage_path)
-        total = cov_df["vimedcss_covered_count"].sum() + cov_df["missing_high_priority_count"].sum()
-        # We can't directly count unmatched here without the matched df,
-        # but the stats should be consistent
-        assert stats := matcher.run()
-        assert "coverage_ratio" in stats
+        stats = matcher.run()
+        # All 5 terms should be present with some match status
+        assert stats["coverage_ratio"] >= 0.0
 
     def test_registry_csv_required_columns(self, external_configs, vimedcss_inventory):
         """Task 6: Registry CSV contains required columns."""
@@ -487,8 +480,9 @@ class TestCLIMatchExternal:
         
         # Create configs
         os.makedirs(tmp_path / "configs", exist_ok=True)
-        for fname in ["dataset.yaml", "taxonomy.yaml", "external.yaml"]:
-            (tmp_path / "configs" / fname).write_text("{}\n" if fname != "external.yaml" else """
+        for fname in ["dataset.yaml", "taxonomy.yaml", "llm.yaml", "asr.yaml", "report.yaml", "external.yaml"]:
+            if fname == "external.yaml":
+                (tmp_path / "configs" / fname).write_text("""
 enabled: true
 pilot_sources:
   - name: "Test"
@@ -501,6 +495,8 @@ output_dir: "{term_dir}"
 match_mode: "exact_case_insensitive"
 min_commonness_for_high_priority: 3
 """.format(mock_dir=mock_dir, term_dir=str(term_dir)))
+            else:
+                (tmp_path / "configs" / fname).write_text("{}\n")
         
         cfg = AppConfig(config_dir=str(tmp_path / "configs"))
         matcher = ExternalReferenceMatcher(

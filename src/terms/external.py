@@ -91,7 +91,7 @@ class ExternalReferenceMatcher:
                 "source_name": src.get("name", ""),
                 "source_url": src.get("source_url", ""),
                 "license_or_access_note": src.get("license_or_access_note", ""),
-                "include_in_pilot": src.get("include_in_pilot", False),
+                "include_in_pilot": bool(src.get("include_in_pilot", False)),
                 "coverage_notes": src.get("coverage_notes", ""),
             })
         
@@ -345,8 +345,7 @@ class ExternalReferenceMatcher:
             cat_groups = matched_df.groupby("entity_category", dropna=False)
             lines.append("| Entity Category | Tổng | Được phủ sóng | Tỷ lệ | Thiếu ưu tiên cao |")
             lines.append("|---|---|---|---|---|")
-            for cat, grp in sorted(cat_groups.groups.keys()):
-                grp = cat_groups.get_group(cat)
+            for cat, grp in cat_groups:
                 total = len(grp)
                 covered = (grp["external_match_status"] == "covered").sum()
                 ratio = covered / total if total > 0 else 0
@@ -366,8 +365,7 @@ class ExternalReferenceMatcher:
             dom_groups = matched_df.groupby("medical_domain", dropna=False)
             lines.append("| Medical Domain | Tổng | Được phủ sóng | Tỷ lệ | Thiếu ưu tiên cao |")
             lines.append("|---|---|---|---|---|")
-            for dom, grp in sorted(dom_groups.groups.keys()):
-                grp = dom_groups.get_group(dom)
+            for dom, grp in dom_groups:
                 total = len(grp)
                 covered = (grp["external_match_status"] == "covered").sum()
                 ratio = covered / total if total > 0 else 0
