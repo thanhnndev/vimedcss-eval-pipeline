@@ -1,4 +1,8 @@
+import os
 import sys
+from dotenv import load_dotenv
+
+load_dotenv()
 import argparse
 from src.shared.config import AppConfig
 from src.shared.logging import setup_logger

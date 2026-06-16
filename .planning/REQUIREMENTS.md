@@ -14,29 +14,29 @@ Requirements for initial release. Each maps to roadmap phases.
 - [x] **INGEST-04**: Generate localized schema mapping report (`metadata_schema_report.md`).
 
 ### CS Term Extraction & Normalization (TERMS)
-- [ ] **TERMS-01**: Parse `cs_terms_list` fields from metadata CSV in various formats (JSON lists, comma-separated lists) and extract raw CS terms.
-- [ ] **TERMS-02**: Clean terms (lowercase, strip punctuation, trim whitespace) to create normalized terms while protecting medical abbreviations and spellings.
-- [ ] **TERMS-03**: Generate unique CS terms inventory CSV (`cs_terms_inventory.csv`) and mapping to example segment IDs / reference texts (`cs_term_examples.jsonl`).
+- [x] **TERMS-01**: Parse `cs_terms_list` fields from metadata CSV in various formats (JSON lists, comma-separated lists) and extract raw CS terms.
+- [x] **TERMS-02**: Clean terms (lowercase, strip punctuation, trim whitespace) to create normalized terms while protecting medical abbreviations and spellings.
+- [x] **TERMS-03**: Generate unique CS terms inventory CSV (`cs_terms_inventory.csv`) and mapping to example segment IDs / reference texts (`cs_term_examples.jsonl`).
 
 ### Term Taxonomy & LLM Classification (CLASSIFY)
-- [ ] **CLASSIFY-01**: Classify unique CS terms into primary/secondary entity categories (e.g. drug, disease, biomarker, anatomy, hormone) using OpenAI Structured Output API.
-- [ ] **CLASSIFY-02**: Classify unique CS terms into primary/secondary medical domains/specialties (e.g. endocrinology, cardiology, respiratory) based on context examples.
-- [ ] **CLASSIFY-03**: Segment terms into frequency buckets (singleton, rare, medium, common) and split/topic presence lists.
-- [ ] **CLASSIFY-04**: Save taxonomy files and audit logs containing raw LLM requests, responses, confidence scores, and review flags (`llm_classification_audit.jsonl`).
+- [x] **CLASSIFY-01**: Classify unique CS terms into primary/secondary entity categories (e.g. drug, disease, biomarker, anatomy, hormone) using OpenAI Structured Output API.
+- [x] **CLASSIFY-02**: Classify unique CS terms into primary/secondary medical domains/specialties (e.g. endocrinology, cardiology, respiratory) based on context examples.
+- [x] **CLASSIFY-03**: Segment terms into frequency buckets (singleton, rare, medium, common) and split/topic presence lists.
+- [x] **CLASSIFY-04**: Save taxonomy files and audit logs containing raw LLM requests, responses, confidence scores, and review flags (`llm_classification_audit.jsonl`).
 
 ### External Reference Integration (EXT_REF)
 - [x] **EXT_REF-01**: Register pilot external medical reference lexicons (ICD-10, ATC, Meddict) with source URLs and licenses.
 - [x] **EXT_REF-02**: Match ViMedCSS CS terms against external lexicons to compute coverage ratios and identify missing high-priority medical terms.
 
 ### ASR Baseline Evaluation (ASR_EVAL)
-- [ ] **ASR_EVAL-01**: Download and verify audio files locally to generate ASR evaluation manifests (`eval_manifest_<split>.jsonl`).
-- [ ] **ASR_EVAL-02**: Execute `faster-whisper` baseline transcribing on splits, supporting CPU/GPU configurations and `sample_first` smoke test mode.
-- [ ] **ASR_EVAL-03**: Compute WER, CER, CS-term exact recall, missing rate, and substitution rate metrics.
-- [ ] **ASR_EVAL-04**: Classify ASR errors on CS terms (phonetic Vietnamese transcription, spelling mistakes, missing terms) and save error reports.
+- [x] **ASR_EVAL-01**: Download and verify audio files locally to generate ASR evaluation manifests (`eval_manifest_<split>.jsonl`).
+- [x] **ASR_EVAL-02**: Execute `faster-whisper` baseline transcribing on splits, supporting CPU/GPU configurations and `sample_first` smoke test mode.
+- [x] **ASR_EVAL-03**: Compute WER, CER, CS-term exact recall, missing rate, and substitution rate metrics.
+- [x] **ASR_EVAL-04**: Classify ASR errors on CS terms (phonetic Vietnamese transcription, spelling mistakes, missing terms) and save error reports.
 
 ### Report Generation (REPORT)
-- [ ] **REPORT-01**: Aggregate all audited data quality issues, term coverage distributions, external matches, and ASR evaluation metrics.
-- [ ] **REPORT-02**: Generate a comprehensive Vietnamese markdown report summarizing findings, weaknesses, and dataset limitations.
+- [x] **REPORT-01**: Aggregate all audited data quality issues, term coverage distributions, external matches, and ASR evaluation metrics.
+- [x] **REPORT-02**: Generate a comprehensive Vietnamese markdown report summarizing findings, weaknesses, and dataset limitations.
 
 ## v2 Requirements
 
