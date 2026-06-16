@@ -4,7 +4,7 @@ import json
 import time
 import logging
 from typing import Any, Dict, List, Optional
-from datetime import datetime
+from datetime import datetime, timezone
 
 import pandas as pd
 
@@ -91,7 +91,7 @@ class ASRTranscriber:
                         "model_name": self.model_name,
                         "device": self.device,
                         "compute_type": self.compute_type,
-                        "timestamp": datetime.utcnow().isoformat() + "Z",
+                        "timestamp": datetime.now(timezone.utc).isoformat() + "Z",
                     })
                 self._write_jsonl(hyp_path, mock_rows)
             self._write_model_registry()
@@ -213,7 +213,7 @@ class ASRTranscriber:
                     "model_name": self.model_name,
                     "device": self.device,
                     "compute_type": self.compute_type,
-                    "timestamp": datetime.utcnow().isoformat() + "Z",
+                    "timestamp": datetime.now(timezone.utc).isoformat() + "Z",
                 })
             except Exception as exc:
                 logger.exception(f"Transcription failed for segment {row['segment_id']}: {exc}")
@@ -240,7 +240,7 @@ class ASRTranscriber:
                 "device": self.device,
                 "compute_type": self.compute_type,
                 "batch_size": self.batch_size,
-                "timestamp": datetime.utcnow().isoformat() + "Z",
+                "timestamp": datetime.now(timezone.utc).isoformat() + "Z",
             })
         logger.info(f"Updated model registry at {path}")
 
@@ -275,6 +275,7 @@ class ASRTranscriber:
             "start": ["start_time", "start"],
             "end": ["end_time", "end"],
             "source_url": ["source_url", "url"],
+            "audio": ["audio", "audio_path", "audio_file"],
         }
         mapping: Dict[str, Optional[str]] = {}
         for std_field, candidates in field_fallbacks.items():
