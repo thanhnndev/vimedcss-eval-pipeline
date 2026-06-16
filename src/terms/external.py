@@ -249,8 +249,13 @@ class ExternalReferenceMatcher:
         self, matched_df: pd.DataFrame, external_df: pd.DataFrame
     ) -> Dict[str, Any]:
         """Compute coverage ratios by entity_category and medical_domain using pandas."""
+        if "occurrence_count" not in matched_df.columns:
+            raise ValueError(
+                "matched_df must contain 'occurrence_count' to compute missing high-priority terms"
+            )
+
         coverage_rows: List[Dict[str, Any]] = []
-        
+
         # Group by entity_category
         for group_col in ["entity_category", "medical_domain"]:
             if group_col not in matched_df.columns:

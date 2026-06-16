@@ -584,7 +584,7 @@ class TestClassifierConfigDefaults:
         (tmp_path / "configs" / "llm.yaml").write_text(
             "enabled: true\nprovider: openai\nmodel: gpt-4o-mini\nbatch_size: 10\nmax_retries: 3\n"
         )
-        for fname in ["dataset.yaml", "taxonomy.yaml", "asr.yaml", "report.yaml"]:
+        for fname in ["dataset.yaml", "taxonomy.yaml", "asr.yaml", "report.yaml", "external.yaml"]:
             (tmp_path / "configs" / fname).write_text("{}\n")
         cfg = AppConfig(config_dir=str(tmp_path / "configs"))
         llm = cfg.get_llm_config()
