@@ -12,6 +12,7 @@ class AppConfig:
         self.llm = self._load_yaml("llm.yaml")
         self.asr = self._load_yaml("asr.yaml")
         self.report = self._load_yaml("report.yaml")
+        self.external = self._load_yaml("external.yaml")
         
     def _load_yaml(self, filename: str) -> Dict[str, Any]:
         filepath = os.path.join(self.config_dir, filename)
@@ -38,3 +39,6 @@ class AppConfig:
 
     def get_report_config(self) -> Dict[str, Any]:
         return self.report
+
+    def get_external_config(self) -> Dict[str, Any]:
+        return self.external
