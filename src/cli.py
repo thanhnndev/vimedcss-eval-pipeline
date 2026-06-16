@@ -20,6 +20,9 @@ def main():
     # Audit metadata command
     subparsers.add_parser("audit-metadata", help="Run metadata schema audit and statistics checks")
     
+    # Extract terms command
+    subparsers.add_parser("extract-terms", help="Extract and normalize code-switching medical terms from metadata")
+    
     args = parser.parse_args()
     
     if not args.command:
@@ -55,6 +58,24 @@ def main():
             print(f"Schema report generated at: outputs/audit/metadata_schema_report.md")
         except Exception as e:
             logger.error(f"Audit metadata failed: {e}")
+            sys.exit(1)
+
+    elif args.command == "extract-terms":
+        logger.info("Starting code-switching term extraction and normalization...")
+        try:
+            from src.terms.extractor import TermExtractor
+            extractor = TermExtractor(config.get_dataset_config(), config.get_taxonomy_config())
+            stats = extractor.extract_and_analyze()
+            logger.info("Term extraction completed successfully!")
+            print(f"Total unique terms extracted: {stats['total_unique_normalized_terms']}")
+            print(f"Total occurrences: {stats['total_raw_term_occurrences']}")
+            print(f"Common terms (>=20): {stats['common_terms_count']}")
+            print(f"Rare terms (<5): {stats['rare_terms_count']}")
+            print(f"Hard-only terms: {stats['hard_only_terms_count']}")
+            print(f"Unseen in train terms: {stats['unseen_in_train_terms_count']}")
+            print(f"Inventory saved at: outputs/term_coverage/cs_terms_inventory.csv")
+        except Exception as e:
+            logger.error(f"Extract terms failed: {e}")
             sys.exit(1)
 
 if __name__ == "__main__":

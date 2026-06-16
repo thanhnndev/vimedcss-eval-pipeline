@@ -6,7 +6,7 @@ This roadmap details the phases to implement a complete pipeline evaluating medi
 
 ## Phases
 
-- [ ] **Phase 1: CS Term Extraction & Normalization** - Extract unique terms and save normalized dictionary.
+- [x] **Phase 1: CS Term Extraction & Normalization** - Extract unique terms and save normalized dictionary.
 - [ ] **Phase 2: Term Taxonomy & LLM Classification** - Call LLM to classify terms into entity categories and medical domains.
 - [ ] **Phase 3: External Reference Match** - Match terms against ICD-10, ATC, and Meddict reference lexicons.
 - [ ] **Phase 4: ASR Baseline Evaluation** - Run faster-whisper transcribing and compute WER/CER/CS metrics.
@@ -25,7 +25,7 @@ This roadmap details the phases to implement a complete pipeline evaluating medi
 **Plans**: 1 plan
 
 Plans:
-- [ ] 01-01: Implement CS term parser, cleaner, and mapping exporter.
+- [x] 01-01: Implement CS term parser, cleaner, and mapping exporter.
 
 ### Phase 2: Term Taxonomy & LLM Classification
 **Goal**: Classify unique terms into entity categories and medical domains using OpenAI structured output API.
@@ -87,7 +87,7 @@ Plans:
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. CS Term Extraction | 0/1 | Not started | - |
+| 1. CS Term Extraction | 1/1 | Complete | 2026-06-16 |
 | 2. LLM Classification | 0/1 | Not started | - |
 | 3. External Match | 0/1 | Not started | - |
 | 4. ASR Evaluation | 0/2 | Not started | - |
