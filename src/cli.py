@@ -27,7 +27,12 @@ def main():
     classify_parser = subparsers.add_parser("classify-terms", help="Classify unique code-switching medical terms using LLM")
     classify_parser.add_argument("--mock", action="store_true", help="Use mock classification without calling OpenAI API")
     classify_parser.add_argument("--limit", type=int, default=None, help="Limit the number of terms to classify (useful for testing)")
-    
+
+    # Match external command
+    match_parser = subparsers.add_parser("match-external", help="Match ViMedCSS terms against external medical reference lexicon")
+    match_parser.add_argument("--mock", action="store_true", help="Use built-in synthetic pilot inventory for smoke testing")
+    match_parser.add_argument("--limit", type=int, default=None, help="Limit the number of ViMedCSS terms to process (useful for testing)")
+
     args = parser.parse_args()
     
     if not args.command:
@@ -100,6 +105,36 @@ def main():
             print(f"Summary generated at: outputs/term_coverage/term_taxonomy_summary.md")
         except Exception as e:
             logger.error(f"Classify terms failed: {e}")
+            sys.exit(1)
+
+    elif args.command == "match-external":
+        logger.info("Starting external reference matching...")
+        try:
+            from src.terms.external import ExternalReferenceMatcher
+            ext_config = config.get_external_config()
+            matcher = ExternalReferenceMatcher(
+                config.get_dataset_config(),
+                config.get_taxonomy_config(),
+                ext_config
+            )
+            if args.mock:
+                import tempfile
+                mock_dir = tempfile.mkdtemp()
+                mock_inv_path = ExternalReferenceMatcher.build_mock_inventory(mock_dir)
+                matcher.inventory_dir = mock_dir
+                logger.info(f"Mock mode: using synthetic inventory at {mock_inv_path}")
+            stats = matcher.run()
+            logger.info("External reference matching completed successfully!")
+            print(f"External term count: {stats['external_term_count']}")
+            print(f"ViMedCSS covered count: {stats['vimedcss_covered_count']}")
+            print(f"Overall coverage ratio: {stats['coverage_ratio']:.2%}")
+            print(f"Missing high-priority terms: {stats['missing_high_priority_count']}")
+            print(f"Registry: outputs/term_coverage/external_sources_registry.csv")
+            print(f"External inventory: outputs/term_coverage/external_medical_term_inventory.csv")
+            print(f"Coverage CSV: outputs/term_coverage/vimedcss_vs_external_coverage.csv")
+            print(f"Summary: outputs/term_coverage/external_coverage_summary.md")
+        except Exception as e:
+            logger.error(f"Match external failed: {e}")
             sys.exit(1)
 
 if __name__ == "__main__":
