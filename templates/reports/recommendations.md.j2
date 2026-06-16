@@ -1,0 +1,17 @@
+{# Kết luận và khuyến nghị cho VietMedVoice - Recommendations #}
+## Khuyến nghị cho VietMedVoice
+
+### 1. Nâng cao ASR performance trên CS terms
+
+- Fine-tune ASR model với data chứa nhiều CS medical terms
+- Tập trung vào các term có error rate cao (abbreviations, multi-syllabic terms)
+
+### 2. Cải thiện term classification
+
+- Chạy LLM classification với chế độ non-mock (cần OPENAI_API_KEY)
+- Human review các term có confidence thấp (<0.80)
+
+### 3. Mở rộng external coverage
+
+- Bổ sung thêm source inventories (ICD-10, ATC, MedDRA)
+- Tăng số lượng reference terms trong pilot inventory

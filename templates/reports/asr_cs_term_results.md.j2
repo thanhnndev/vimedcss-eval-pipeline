@@ -1,0 +1,16 @@
+{# Kết quả ASR trên CS terms - ASR CS Term Results #}
+{% if not asr_errors_available %}
+> **Trạng thái ASR Evaluation: PENDING**
+> 
+> Các phần liên quan đến ASR evaluation chưa được generate do Phase 4 chưa hoàn thành.
+{% elif asr_errors.empty %}
+> **Không có dữ liệu ASR errors.**
+{% else %}
+### Top Failed CS Terms
+
+| Term | Error Type | Count |
+|------|------------|-------|
+{% for row in asr_errors.head(20).to_dict('records') %}
+| `{{ row.get('term', '') }}` | {{ row.get('error_type', 'unknown') }} | {{ row.get('count', 0) }} |
+{% endfor %}
+{% endif %}

@@ -1,0 +1,12 @@
+{# Tổng quan coverage 889 thuật ngữ CS - Term Coverage Overview #}
+{% if inventory.empty %}
+*Chưa có dữ liệu inventory. Vui lòng chạy Phase 2 (term extraction) trước.*
+{% else %}
+Tổng số thuật ngữ CS độc nhất được trích xuất từ dataset: **{{ inventory|length }}**
+
+Thuật ngữ được trích xuất bằng cách:
+1. Parse transcript segments từ Hugging Face dataset
+2. Extract English medical terms (code-switching)
+3. Normalize về dạng chuẩn (lowercase, lemmatization cơ bản)
+4. Deduplicate và count occurrences
+{% endif %}

@@ -58,8 +58,10 @@ asr:
 	@echo "Please run individual stages manually or check .planning/phases/04/ for progress."
 
 report:
-	@echo "Report generation module is under development (Phase 5)."
-	@echo "Please run individual stages manually or check .planning/phases/05/ for progress."
+	PYTHONPATH=. .venv/bin/python src/cli.py generate-report
+
+report-preview:
+	PYTHONPATH=. .venv/bin/python src/cli.py generate-report --skip-asr
 
 pipeline: download audit terms classify external
 	@echo "Full pipeline completed. Check outputs/ for results."

@@ -1,0 +1,10 @@
+{# Phân loại term theo entity category - Entity Category Analysis #}
+{% if taxonomy_summary.empty %}
+*Chưa có dữ liệu taxonomy summary. Vui lòng chạy Phase 3 (LLM classification) trước.*
+{% else %}
+| Entity Category | Số lượng | Tỷ lệ (%) |
+|-----------------|----------|-----------|
+{% for row in taxonomy_summary.to_dict('records') %}
+| `{{ row.get('entity_category', 'unknown') }}` | {{ row.get('count', 0) }} | {{ row.get('percentage', 0) }}% |
+{% endfor %}
+{% endif %}

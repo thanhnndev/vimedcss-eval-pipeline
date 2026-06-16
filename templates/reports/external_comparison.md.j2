@@ -1,0 +1,14 @@
+{# Đối chiếu với external medical term inventory - External Comparison #}
+> **Giới hạn phạm vi:** Đây là giai đoạn pilot (thử nghiệm). 
+> External inventory chỉ bao gồm 5 thuật ngữ tham chiếu. 
+> Coverage ratio không đại diện cho tỷ lệ phủ sóng thực tế.
+
+{% if external_coverage.empty %}
+*Chưa có dữ liệu external coverage. Vui lòng chạy Phase 3 (external matching) trước.*
+{% else %}
+### Tổng quan Coverage
+
+{% for row in external_coverage.head(5).to_dict('records') %}
+- **{{ row.get('metric', 'N/A') }}**: {{ row.get('value', 'N/A') }}
+{% endfor %}
+{% endif %}

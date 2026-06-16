@@ -11,7 +11,15 @@ def main():
     parser = argparse.ArgumentParser(
         description="ViMedCSS Term Coverage & ASR Evaluation Pipeline Command Line Interface"
     )
-    
+
+    # Global options
+    parser.add_argument(
+        "--config-dir",
+        type=str,
+        default="configs",
+        help="Directory containing configuration files (default: configs)"
+    )
+
     subparsers = parser.add_subparsers(dest="command", help="Sub-commands")
     
     # Download metadata command
@@ -33,14 +41,20 @@ def main():
     match_parser.add_argument("--mock", action="store_true", help="Use built-in synthetic pilot inventory for smoke testing")
     match_parser.add_argument("--limit", type=int, default=None, help="Limit the number of ViMedCSS terms to process (useful for testing)")
 
+    # Generate report command
+    report_parser = subparsers.add_parser("generate-report", help="Generate Vietnamese final report aggregating all pipeline artifacts")
+    report_parser.add_argument("--skip-asr", action="store_true", help="Skip ASR sections regardless of outputs presence")
+    report_parser.add_argument("--output-dir", type=str, default=None, help="Override output directory (default: outputs/reports)")
+    report_parser.add_argument("--limit", type=int, default=None, help="Limit number of sections for preview/testing")
+
     args = parser.parse_args()
     
     if not args.command:
         parser.print_help()
         sys.exit(1)
-        
+
     try:
-        config = AppConfig()
+        config = AppConfig(config_dir=args.config_dir)
     except Exception as e:
         logger.error(f"Failed to load application configuration: {e}")
         sys.exit(1)
@@ -180,6 +194,31 @@ def main():
             print(f"Summary: outputs/asr_eval/asr_evaluation_summary.md")
         except Exception as e:
             logger.error(f"Eval ASR failed: {e}")
+            sys.exit(1)
+
+    elif args.command == "generate-report":
+        logger.info("Starting report generation...")
+        try:
+            from src.reports.report_generator import ReportGenerator
+            generator = ReportGenerator(
+                config.get_dataset_config(),
+                config.get_taxonomy_config(),
+                config.get_report_config(),
+                config.get_external_config(),
+            )
+            generated_files = generator.generate(
+                output_dir=args.output_dir,
+                skip_asr=args.skip_asr,
+            )
+            logger.info("Report generation completed successfully!")
+            for name, path in generated_files.items():
+                print(f"Generated {name}: {path}")
+        except FileNotFoundError as e:
+            logger.error(f"Missing required artifact: {e}")
+            logger.error("Please ensure the pipeline has been run to generate required artifacts.")
+            sys.exit(1)
+        except Exception as e:
+            logger.error(f"Generate report failed: {e}")
             sys.exit(1)
 
 if __name__ == "__main__":

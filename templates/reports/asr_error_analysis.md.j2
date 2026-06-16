@@ -1,0 +1,16 @@
+{# Phân tích lỗi ASR theo entity category và domain - ASR Error Analysis #}
+{% if not asr_taxonomy_available %}
+> **Trạng thái ASR Evaluation: PENDING**
+> 
+> Các phần liên quan đến ASR evaluation chưa được generate do Phase 4 chưa hoàn thành.
+{% elif asr_taxonomy.empty %}
+> **Không có dữ liệu ASR error taxonomy.**
+{% else %}
+### Error Taxonomy by Entity Category
+
+| Entity Category | Error Count | Error Rate |
+|-----------------|-------------|------------|
+{% for row in asr_taxonomy.to_dict('records') %}
+| `{{ row.get('entity_category', 'unknown') }}` | {{ row.get('count', 0) }} | {{ (row.get('error_rate', 0) * 100)|round(1) }}% |
+{% endfor %}
+{% endif %}
