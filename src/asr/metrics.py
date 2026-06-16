@@ -76,9 +76,11 @@ class ASRMetrics:
 
         if not mock:
             top_terms = self._compute_top_failed_terms(splits, inventory)
-            top_terms_path = os.path.join(self.errors_dir, "top_failed_terms.csv")
-            pd.DataFrame(top_terms).to_csv(top_terms_path, index=False)
-            logger.info(f"Wrote top failed terms to {top_terms_path}")
+        else:
+            top_terms = []
+        top_terms_path = os.path.join(self.errors_dir, "top_failed_terms.csv")
+        pd.DataFrame(top_terms).to_csv(top_terms_path, index=False)
+        logger.info(f"Wrote top failed terms to {top_terms_path}")
 
         return {"splits": len(rows)}
 

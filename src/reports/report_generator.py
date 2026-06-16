@@ -119,7 +119,11 @@ class ReportGenerator:
                 f"Please ensure the pipeline has been run to generate this artifact."
             )
         logger.debug(f"Loading CSV: {path}")
-        return pd.read_csv(path)
+        try:
+            return pd.read_csv(path)
+        except pd.errors.EmptyDataError:
+            logger.warning(f"CSV file has no data: {path}")
+            return pd.DataFrame()
 
     def _load_json(self, path: str) -> Dict[str, Any]:
         """Load a JSON file.

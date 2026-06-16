@@ -48,6 +48,12 @@ def resolve_audio_path(metadata_row, local_raw_dir: str) -> str:
     3. Recurse search under local_raw_dir for a matching basename
     """
     raw_path = metadata_row.get("audio") if isinstance(metadata_row, dict) else getattr(metadata_row, "audio", None)
+    try:
+        import pandas as pd
+        if raw_path is None or pd.isna(raw_path):
+            return ""
+    except (TypeError, ValueError):
+        pass
     if not raw_path:
         return ""
 
