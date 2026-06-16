@@ -1,4 +1,4 @@
-.PHONY: install download audit terms classify classify-mock external external-mock asr report test clean pipeline help open-env
+.PHONY: install download audit terms classify classify-mock external external-mock asr report test clean pipeline help
 
 # Default target
 all: help
@@ -18,7 +18,6 @@ help:
 	@echo "  make pipeline        - Run full pipeline: download -> audit -> terms -> classify -> external"
 	@echo "  make test            - Run all pytest unit tests"
 	@echo "  make clean           - Clean python caches, logs, and outputs"
-	@echo "  make open-env        - Open .env in default editor for API key setup"
 
 install:
 	.venv/bin/pip install -r requirements.txt
@@ -73,6 +72,3 @@ clean:
 	touch outputs/term_coverage/.gitkeep
 	touch outputs/asr_eval/.gitkeep
 	touch outputs/reports/.gitkeep
-
-open-env:
-	$(EDITOR) .env || echo "No EDITOR set. Please open .env manually."
