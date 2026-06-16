@@ -275,6 +275,7 @@ class ASRTranscriber:
             "start": ["start_time", "start"],
             "end": ["end_time", "end"],
             "source_url": ["source_url", "url"],
+            "audio": ["audio", "audio_path", "audio_file"],
         }
         mapping: Dict[str, Optional[str]] = {}
         for std_field, candidates in field_fallbacks.items():
