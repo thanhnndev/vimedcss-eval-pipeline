@@ -25,8 +25,8 @@ Requirements for initial release. Each maps to roadmap phases.
 - [ ] **CLASSIFY-04**: Save taxonomy files and audit logs containing raw LLM requests, responses, confidence scores, and review flags (`llm_classification_audit.jsonl`).
 
 ### External Reference Integration (EXT_REF)
-- [ ] **EXT_REF-01**: Register pilot external medical reference lexicons (ICD-10, ATC, Meddict) with source URLs and licenses.
-- [ ] **EXT_REF-02**: Match ViMedCSS CS terms against external lexicons to compute coverage ratios and identify missing high-priority medical terms.
+- [x] **EXT_REF-01**: Register pilot external medical reference lexicons (ICD-10, ATC, Meddict) with source URLs and licenses.
+- [x] **EXT_REF-02**: Match ViMedCSS CS terms against external lexicons to compute coverage ratios and identify missing high-priority medical terms.
 
 ### ASR Baseline Evaluation (ASR_EVAL)
 - [ ] **ASR_EVAL-01**: Download and verify audio files locally to generate ASR evaluation manifests (`eval_manifest_<split>.jsonl`).
@@ -73,8 +73,8 @@ Which phases cover which requirements. Updated during roadmap creation.
 | CLASSIFY-02 | Phase 2 | Pending |
 | CLASSIFY-03 | Phase 2 | Pending |
 | CLASSIFY-04 | Phase 2 | Pending |
-| EXT_REF-01 | Phase 3 | Pending |
-| EXT_REF-02 | Phase 3 | Pending |
+| EXT_REF-01 | Phase 3 | Complete |
+| EXT_REF-02 | Phase 3 | Complete |
 | ASR_EVAL-01 | Phase 4 | Pending |
 | ASR_EVAL-02 | Phase 4 | Pending |
 | ASR_EVAL-03 | Phase 4 | Pending |

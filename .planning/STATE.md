@@ -2,16 +2,16 @@
 gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
-status: verifying
-stopped_at: Phase 03-01 plan complete, ready for verification.
-last_updated: "2026-06-16T08:30:55.303Z"
+status: ready_to_plan
+stopped_at: Phase 03 complete (1/1) — ready to discuss Phase 4
+last_updated: 2026-06-16T08:39:44.780Z
 last_activity: 2026-06-16 -- Phase 03 plan complete
 progress:
   total_phases: 5
   completed_phases: 1
   total_plans: 6
-  completed_plans: 3
-  percent: 50
+  completed_plans: 1
+  percent: 20
 ---
 
 # Project State
@@ -21,13 +21,13 @@ progress:
 See: .planning/PROJECT.md (updated 2026-06-16)
 
 **Core value:** Accurate, traceable medical term coverage analysis and ASR error taxonomy for English/Vietnamese code-switching data to guide future dataset construction.
-**Current focus:** Phase 03 — External Reference Match (complete)
+**Current focus:** Phase 4 — asr baseline evaluation
 
 ## Current Position
 
-Phase: 03 (External Reference Match) — COMPLETE
-Plan: 1 of 1
-Status: Phase complete — ready for verification
+Phase: 4
+Plan: Not started
+Status: Ready to plan
 Last activity: 2026-06-16
 
 Progress: [▓▓▓▓▓▓▓▓▓▓] 50%
@@ -36,7 +36,7 @@ Progress: [▓▓▓▓▓▓▓▓▓▓] 50%
 
 **Velocity:**
 
-- Total plans completed: 3
+- Total plans completed: 4
 - Average duration: 12 min
 - Total execution time: 0.62 hours
 
@@ -49,6 +49,7 @@ Progress: [▓▓▓▓▓▓▓▓▓▓] 50%
 | 3. External Match | 1/1 | 0.12h | 12 min |
 | 4. ASR Evaluation | 0/2 | - | - |
 | 5. Report Generation | 0/1 | - | - |
+| 03 | 1 | - | - |
 
 **Recent Trend:**
 
