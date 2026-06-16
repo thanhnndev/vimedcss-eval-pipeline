@@ -1,4 +1,4 @@
-.PHONY: install download audit terms classify classify-mock external external-mock plot asr report test clean pipeline help
+.PHONY: install download audit terms classify classify-mock external external-mock plot run-asr eval-asr asr-mock asr report report-preview test clean pipeline help
 
 # Default target
 all: help
@@ -17,7 +17,10 @@ help:
 	@echo "  make classify-mock   - Run LLM classification in mock mode (no API required)"
 	@echo "  make external        - Match ViMedCSS terms against external medical reference lexicon"
 	@echo "  make external-mock   - Run external matching in mock mode (no external inventory required)"
-	@echo "  make asr             - Run ASR baseline evaluation (Phase 4 - coming soon)"
+	@echo "  make run-asr         - Run ASR baseline transcription (faster-whisper)"
+	@echo "  make eval-asr        - Compute WER/CER/CS-term metrics and error taxonomy"
+	@echo "  make asr-mock        - Run ASR pipeline in mock mode (no model download)"
+	@echo "  make asr             - Run full ASR pipeline (run-asr + eval-asr)"
 	@echo "  make report          - Generate Vietnamese final report (Phase 5 - coming soon)"
 	@echo "  make pipeline        - Run full pipeline: download -> audit -> terms -> classify -> external"
 	@echo ""
@@ -53,9 +56,17 @@ external-mock:
 plot:
 	PYTHONPATH=. .venv/bin/python src/plot.py
 
-asr:
-	@echo "ASR evaluation module is under development (Phase 4)."
-	@echo "Please run individual stages manually or check .planning/phases/04/ for progress."
+run-asr:
+	PYTHONPATH=. .venv/bin/python src/cli.py run-asr
+
+eval-asr:
+	PYTHONPATH=. .venv/bin/python src/cli.py eval-asr
+
+asr-mock:
+	PYTHONPATH=. .venv/bin/python src/cli.py run-asr --mock --limit 10
+	PYTHONPATH=. .venv/bin/python src/cli.py eval-asr --mock --limit 10
+
+asr: run-asr eval-asr
 
 report:
 	PYTHONPATH=. .venv/bin/python src/cli.py generate-report

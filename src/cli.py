@@ -45,6 +45,16 @@ def main():
     match_parser.add_argument("--mock", action="store_true", help="Use built-in synthetic pilot inventory for smoke testing")
     match_parser.add_argument("--limit", type=int, default=None, help="Limit the number of ViMedCSS terms to process (useful for testing)")
 
+    # Run ASR transcription command
+    run_asr_parser = subparsers.add_parser("run-asr", help="Run faster-whisper baseline transcription on configured splits")
+    run_asr_parser.add_argument("--mock", action="store_true", help="Write dummy manifests/hypotheses without calling faster-whisper")
+    run_asr_parser.add_argument("--limit", type=int, default=None, help="Process only N segments per split (overrides sample_first size)")
+
+    # Evaluate ASR command
+    eval_asr_parser = subparsers.add_parser("eval-asr", help="Compute WER/CER/CS-term metrics and classify ASR errors")
+    eval_asr_parser.add_argument("--mock", action="store_true", help="Generate synthetic hypotheses with injected errors for smoke testing")
+    eval_asr_parser.add_argument("--limit", type=int, default=None, help="Limit number of segments to evaluate per split")
+
     # Generate report command
     report_parser = subparsers.add_parser("generate-report", help="Generate Vietnamese final report aggregating all pipeline artifacts")
     report_parser.add_argument("--skip-asr", action="store_true", help="Skip ASR sections regardless of outputs presence")
