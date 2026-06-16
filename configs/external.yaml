@@ -1,0 +1,32 @@
+# External Reference Match Configuration - Phase 3 Pilot
+# This is a pilot implementation for external medical reference matching.
+# Coverage numbers are computed from local CSVs only.
+
+enabled: true
+
+# Pilot sources: verified-access reference lexicons with metadata only.
+# Full term lists are NOT embedded due to license/access constraints.
+# See: Scope Constraints in PLAN.md Phase 3.
+pilot_sources:
+  - name: "ViMedCSS Internal Pilot Lexicon"
+    source_url: "https://github.com/tensorxt/ViMedCSS"
+    license_or_access_note: "Research use - pilot subset curated from dataset domain vocabulary"
+    include_in_pilot: true
+    coverage_notes: "Pilot inventory of common medical terms observed in ViMedCSS dataset"
+
+# Directory containing external inventory CSVs (from pilot sources)
+# For Phase 3, a synthetic pilot inventory is used via --mock flag
+inventory_dir: "data/raw/external/"
+
+# Output directory for external match results
+output_dir: "outputs/term_coverage"
+
+# Match mode for Phase 3 pilot: exact case-insensitive
+match_mode: "exact_case_insensitive"
+
+# Threshold for marking terms as "high priority" when missing from external inventory
+# Terms with occurrence_count >= this value are flagged as missing_high_priority
+min_commonness_for_high_priority: 5
+
+# Coverage summary language
+summary_language: "vi"
