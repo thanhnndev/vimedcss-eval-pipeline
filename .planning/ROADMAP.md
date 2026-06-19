@@ -105,7 +105,10 @@ Plans:
   2. Bilingual inventory saved to `data/icd10/icd10_dual_language.csv` and `.jsonl`.
   3. Ingestion errors logged to `data/icd10/icd10_ingestion_errors.csv`.
   4. Report written to `reports/icd10_ingestion_report.md` with statistics and error summary.
-**Plans**: (not yet planned)
+**Plans**: 1 plan
+
+Plans:
+- [ ] 06A-01-ICD10-INGEST-PLAN.md — Implement ICD-10 dual-language ingestion pipeline with EN/VI join by code
 
 ### Phase 6b: Medical Term Inventory Extended
 **Goal**: Build a comprehensive medical term inventory from ICD-10 (disease backbone) plus supplementary lexicons (drug, lab test, procedure, abbreviation, hormone, biomarker, device, unit, dosage).
@@ -255,7 +258,7 @@ Plans:
 || 3. External Match | 1/1 | Complete | 2026-06-16 |
 || 4. ASR Evaluation | 2/2 | Complete | 2026-06-16 |
 || 5. Report Generation | 1/1 | Complete | 2026-06-16 |
-|| 6a. ICD-10 Dual-Language | — | Not Planned | — |
+|| 6a. ICD-10 Dual-Language | 1/1 | Planned | — |
 || 6b. Medical Term Inventory | — | Not Planned | — |
 || 6c. ViMedCSS Coverage Audit | — | Not Planned | — |
 || 6d. VietMed Feasibility | — | Not Planned | — |
