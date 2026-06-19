@@ -1,0 +1,19 @@
+code,level,label_en,label_vi,chapter_code,chapter_label_en,chapter_label_vi,parent_code,source,source_url,fetched_at
+I10,type,Essential (primary) hypertension,Tăng huyết áp vô căn (nguyên phát),,,,I10-I15,kcb_icd10_tt06,https://ccs.whiteneuron.com/api/ICD10/search/I10,2026-06-19T08:24:45Z
+I10-I15,section,Hypertensive diseases,Bệnh lý tăng huyết áp,,,,,kcb_icd10_tt06,https://ccs.whiteneuron.com/api/ICD10/search/I10-I15,2026-06-19T08:24:45Z
+J09-J18,section,Influenza and pneumonia,Cúm và viêm phổi,,,,,kcb_icd10_tt06,https://ccs.whiteneuron.com/api/ICD10/search/J09-J18,2026-06-19T08:24:45Z
+J18,type,"Pneumonia, organism unspecified","Viêm phổi, tác nhân không xác định",,,,J09-J18,kcb_icd10_tt06,https://ccs.whiteneuron.com/api/ICD10/search/J18,2026-06-19T08:24:45Z
+J18.0,disease,"Bronchopneumonia, unspecified","Viêm phế quản phổi, không đặc hiệu",,,,J18,kcb_icd10_tt06,https://ccs.whiteneuron.com/api/ICD10/search/J18.0,2026-06-19T08:24:45Z
+J18.1,disease,"Lobar pneumonia, unspecified","Viêm phổi thuỳ, không đặc hiệu",,,,J18,kcb_icd10_tt06,https://ccs.whiteneuron.com/api/ICD10/search/J18.1,2026-06-19T08:24:45Z
+J18.2,disease,"Hypostatic pneumonia, unspecified","Viêm phổi do nằm lâu ngày, không đặc hiệu",,,,J18,kcb_icd10_tt06,https://ccs.whiteneuron.com/api/ICD10/search/J18.2,2026-06-19T08:24:45Z
+J18.8,disease,"Other pneumonia, organism unspecified","Viêm phổi khác, không xác định vi sinh vật",,,,J18,kcb_icd10_tt06,https://ccs.whiteneuron.com/api/ICD10/search/J18.8,2026-06-19T08:24:45Z
+J18.9,disease,"Pneumonia, unspecified","Viêm phổi, không đặc hiệu",,,,J18,kcb_icd10_tt06,https://ccs.whiteneuron.com/api/ICD10/search/J18.9,2026-06-19T08:24:45Z
+N30-N39,section,Other diseases of urinary system,Các bệnh khác của hệ tiết niệu,,,,,kcb_icd10_tt06,https://ccs.whiteneuron.com/api/ICD10/search/N30-N39,2026-06-19T08:24:45Z
+N39,type,Other disorders of urinary system,Biến đổi khác của hệ tiết niệu,,,,N30-N39,kcb_icd10_tt06,https://ccs.whiteneuron.com/api/ICD10/search/N39,2026-06-19T08:24:45Z
+N39.0,disease,"Urinary tract infection, site not specified","Nhiễm khuẩn đường tiết niệu, vị trí không xác định",,,,N39,kcb_icd10_tt06,https://ccs.whiteneuron.com/api/ICD10/search/N39.0,2026-06-19T08:24:45Z
+N39.1,disease,"Persistent proteinuria, unspecified","Protein niệu [Tiểu đạm] dai dẳng, không đặc hiệu",,,,N39,kcb_icd10_tt06,https://ccs.whiteneuron.com/api/ICD10/search/N39.1,2026-06-19T08:24:45Z
+N39.2,disease,"Orthostatic proteinuria, unspecified","Protein niệu [Tiểu đạm] tư thế, không đặc hiệu",,,,N39,kcb_icd10_tt06,https://ccs.whiteneuron.com/api/ICD10/search/N39.2,2026-06-19T08:24:45Z
+N39.3,disease,Stress incontinence,Tiểu không tự chủ do Stress,,,,N39,kcb_icd10_tt06,https://ccs.whiteneuron.com/api/ICD10/search/N39.3,2026-06-19T08:24:45Z
+N39.4,disease,Other specified urinary incontinence,Tiểu không tự chủ xác định khác,,,,N39,kcb_icd10_tt06,https://ccs.whiteneuron.com/api/ICD10/search/N39.4,2026-06-19T08:24:45Z
+N39.8,disease,Other specified disorders of urinary system,Biến đổi xác định khác của hệ tiết niệu,,,,N39,kcb_icd10_tt06,https://ccs.whiteneuron.com/api/ICD10/search/N39.8,2026-06-19T08:24:45Z
+N39.9,disease,"Disorder of urinary system, unspecified","Rối loạn của hệ tiết niệu, không đặc hiệu",,,,N39,kcb_icd10_tt06,https://ccs.whiteneuron.com/api/ICD10/search/N39.9,2026-06-19T08:24:45Z

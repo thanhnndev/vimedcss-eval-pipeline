@@ -1,0 +1,6 @@
+code,level,label_en,label_vi,chapter_code,chapter_label_en,chapter_label_vi,parent_code,source,source_url,fetched_at
+I10,type,Mock EN label for I10,Nhãn VI giả cho I10,IX,Chapter IX (mock),Chương IX (giả),,kcb_icd10_tt06,https://ccs.whiteneuron.com/api/ICD10/search/I10?lang=en&vol1=1&vol3=0&html=true,2026-06-19T08:24:45Z
+E11,type,Mock EN label for E11,Nhãn VI giả cho E11,IX,Chapter IX (mock),Chương IX (giả),,kcb_icd10_tt06,https://ccs.whiteneuron.com/api/ICD10/search/E11?lang=en&vol1=1&vol3=0&html=true,2026-06-19T08:24:45Z
+J18,type,Mock EN label for J18,Nhãn VI giả cho J18,IX,Chapter IX (mock),Chương IX (giả),,kcb_icd10_tt06,https://ccs.whiteneuron.com/api/ICD10/search/J18?lang=en&vol1=1&vol3=0&html=true,2026-06-19T08:24:45Z
+K29,type,Mock EN label for K29,Nhãn VI giả cho K29,IX,Chapter IX (mock),Chương IX (giả),,kcb_icd10_tt06,https://ccs.whiteneuron.com/api/ICD10/search/K29?lang=en&vol1=1&vol3=0&html=true,2026-06-19T08:24:45Z
+N39,type,Mock EN label for N39,Nhãn VI giả cho N39,IX,Chapter IX (mock),Chương IX (giả),,kcb_icd10_tt06,https://ccs.whiteneuron.com/api/ICD10/search/N39?lang=en&vol1=1&vol3=0&html=true,2026-06-19T08:24:45Z
