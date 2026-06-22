@@ -1,0 +1,16 @@
+term_id,term_original,term_normalized,entity_type,medical_domain,source_name,review_status,llm_generated_candidate,needs_human_review_reason
+term_000023,CT,ct,abbreviation,unknown,abbreviation_list,not_verified,true,Flagged for human review
+term_000019,ECG,ecg,abbreviation,unknown,abbreviation_list,not_verified,true,Flagged for human review
+term_000020,electrocardiogram,electrocardiogram,abbreviation,unknown,abbreviation_list,not_verified,true,Flagged for human review
+term_000022,magnetic resonance imaging,magnetic resonance imaging,abbreviation,unknown,abbreviation_list,not_verified,true,Flagged for human review
+term_000021,MRI,mri,abbreviation,unknown,abbreviation_list,not_verified,true,Flagged for human review
+term_000028,vitamin,vitamin,biomarker,unknown,vimedcss_seed,not_verified,true,Flagged for human review
+term_000026,oxygen,oxygen,drug,unknown,vimedcss_seed,not_verified,true,Flagged for human review
+term_000027,collagen,collagen,hormone,unknown,vimedcss_seed,not_verified,true,Flagged for human review
+term_000012,Abnormal glucose complicating childbirth,abnormal glucose complicating childbirth,lab_test,unknown,nlm_lab,not_verified,true,Flagged for human review
+term_000011,Abnormal glucose complicating pregnancy,abnormal glucose complicating pregnancy,lab_test,unknown,nlm_lab,not_verified,true,Flagged for human review
+term_000009,Impaired fasting glucose,impaired fasting glucose,lab_test,unknown,nlm_lab,not_verified,true,Flagged for human review
+term_000013,Impaired glucose tolerance (oral),impaired glucose tolerance (oral,lab_test,unknown,nlm_lab,not_verified,true,Flagged for human review
+term_000010,Other abnormal glucose,other abnormal glucose,lab_test,unknown,nlm_lab,not_verified,true,Flagged for human review
+term_000024,virus,virus,pathogen,unknown,vimedcss_seed,not_verified,true,Flagged for human review
+term_000025,gene,gene,unknown,unknown,vimedcss_seed,not_verified,true,Flagged for human review

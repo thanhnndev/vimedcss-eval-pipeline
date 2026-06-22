@@ -1,0 +1,7 @@
+source_name,source_url,source_license,entity_types_provided,term_count,authoritative
+abbreviation_list,configs/term_inventory.yaml#abbreviation_list,,abbreviation,5,false
+icd10,https://ccs.whiteneuron.com/api/ICD10/search/I10,,disease,3,true
+nlm_lab,"https://clinicaltables.nlm.nih.gov/api/icd10cm/v3/search?sf=code,name&terms=glucose&limit=10",,lab_test,5,false
+openfda,"https://api.fda.gov/device/510k.json?search=device_name:""medical device""&limit=20",,device,5,true
+rxnorm,https://rxnav.nlm.nih.gov/REST/drugs.json?name=metformin,NLM RxNorm — public domain,drug,5,true
+vimedcss_seed,,,"biomarker, drug, hormone, pathogen, unknown",5,false

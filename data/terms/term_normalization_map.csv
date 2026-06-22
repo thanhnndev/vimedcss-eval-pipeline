@@ -1,0 +1,22 @@
+raw_form,normalized_form,transformation,entity_type,term_id
+Essential (primary) hypertension,essential (primary) hypertension,case_fold,disease,term_000001
+"Pneumonia, organism unspecified","pneumonia, organism unspecified",case_fold,disease,term_000002
+Other disorders of urinary system,other disorders of urinary system,case_fold,disease,term_000003
+24 HR metformin hydrochloride 1000 MG / saxagliptin 2.5 MG Extended Release Oral Tablet,24 hr metformin hydrochloride 1000 mg / saxagliptin 2.5 mg extended release oral tablet,case_fold,drug,term_000004
+24 HR metformin hydrochloride 1000 MG / saxagliptin 5 MG Extended Release Oral Tablet,24 hr metformin hydrochloride 1000 mg / saxagliptin 5 mg extended release oral tablet,case_fold,drug,term_000005
+24 HR metformin hydrochloride 500 MG / saxagliptin 5 MG Extended Release Oral Tablet,24 hr metformin hydrochloride 500 mg / saxagliptin 5 mg extended release oral tablet,case_fold,drug,term_000006
+linagliptin 2.5 MG / metformin hydrochloride 1000 MG Oral Tablet,linagliptin 2.5 mg / metformin hydrochloride 1000 mg oral tablet,case_fold,drug,term_000007
+linagliptin 2.5 MG / metformin hydrochloride 500 MG Oral Tablet,linagliptin 2.5 mg / metformin hydrochloride 500 mg oral tablet,case_fold,drug,term_000008
+Impaired fasting glucose,impaired fasting glucose,case_fold,lab_test,term_000009
+Other abnormal glucose,other abnormal glucose,case_fold,lab_test,term_000010
+Abnormal glucose complicating pregnancy,abnormal glucose complicating pregnancy,case_fold,lab_test,term_000011
+Abnormal glucose complicating childbirth,abnormal glucose complicating childbirth,case_fold,lab_test,term_000012
+Impaired glucose tolerance (oral),impaired glucose tolerance (oral,"case_fold, punctuation_strip",lab_test,term_000013
+MEDICAL DEVICE TECHNOLOGIES MANUAL BIOPSY NEEDLE,medical device technologies manual biopsy needle,case_fold,device,term_000014
+"MEDICAL DEVICE TECHNOLOGIES, INC.ULTRA","medical device technologies, inc.ultra",case_fold,device,term_000015
+SKIN STAT II SKIN STAPLING MEDICAL DEVICE,skin stat ii skin stapling medical device,case_fold,device,term_000016
+SOLARC/SOLRX 500 SERIES ULTRAVIOLET PHOTOTHERAPY LAMP UNIT FAMILY A NEW MEDICAL DEVICE FAMILY CONSISTING OF 5 MODELS:,solarc/solrx 500 series ultraviolet phototherapy lamp unit family a new medical device family consisting of 5 models,"case_fold, punctuation_strip",device,term_000017
+TS2000 MEDICAL DEVICE MONITOR,ts2000 medical device monitor,case_fold,device,term_000018
+ECG,ecg,case_fold,abbreviation,term_000019
+MRI,mri,case_fold,abbreviation,term_000021
+CT,ct,case_fold,abbreviation,term_000023
