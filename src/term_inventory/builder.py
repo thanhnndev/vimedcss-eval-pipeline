@@ -134,8 +134,6 @@ class InventoryBuilder:
             combined_df["review_status"] = combined_df["review_status"].astype(str)
         if "entity_type" in combined_df.columns:
             combined_df["entity_type"] = combined_df["entity_type"].astype(str)
-        if "llm_generated_candidate" in combined_df.columns:
-            combined_df["llm_generated_candidate"] = combined_df["llm_generated_candidate"].astype(str)
 
         logger.info(f"term_id assigned: {combined_df['term_id'].iloc[0]} … {combined_df['term_id'].iloc[-1]}")
 
@@ -220,10 +218,12 @@ class InventoryBuilder:
             .str.strip()
             .str.lower()
         )
+        # llm_generated_candidate may be boolean or string depending on source
+        llm_col = classified_df["llm_generated_candidate"].astype(str).str.strip().str.lower()
         review_queue = int(
             (
                 review_status_col.isin(["needs_review", "not_verified"])
-                | (classified_df["llm_generated_candidate"].astype(str).str.lower() == "true")
+                | (llm_col == "true")
             ).sum()
         )
 
@@ -348,6 +348,14 @@ class InventoryBuilder:
         out = self.config.output_dir
         now = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
 
+        def _bool_to_str(df: pd.DataFrame) -> pd.DataFrame:
+            """Convert all boolean columns to lowercase 'true'/'false' strings for CSV."""
+            df = df.copy()
+            for col in df.columns:
+                if df[col].dtype == bool:
+                    df[col] = df[col].map({True: "true", False: "false"})
+            return df
+
         # ---- File 1: medical_term_inventory.csv ----
         inv_cols = [
             "term_id",
@@ -365,7 +373,7 @@ class InventoryBuilder:
             "llm_generated_candidate",
             "fetched_at",
         ]
-        inv_df = classified_df[[c for c in inv_cols if c in classified_df.columns]].copy()
+        inv_df = _bool_to_str(classified_df[[c for c in inv_cols if c in classified_df.columns]])
         inv_path = os.path.join(out, "medical_term_inventory.csv")
         inv_df.to_csv(inv_path, index=False)
         logger.info(f"Written: {inv_path} ({len(inv_df)} rows)")
@@ -394,7 +402,7 @@ class InventoryBuilder:
             review_status_str.isin(["not_verified", "needs_review"])
             | (llm_candidate_str == "true")
         )
-        human_review_df = classified_df[is_review].copy()
+        human_review_df = _bool_to_str(classified_df[is_review].copy())
         hr_cols = [
             "term_id",
             "term_original",
@@ -407,6 +415,8 @@ class InventoryBuilder:
             "needs_human_review_reason",
         ]
         hr_df = human_review_df[[c for c in hr_cols if c in human_review_df.columns]].copy()
+        if "needs_human_review_reason" not in hr_df.columns:
+            hr_df["needs_human_review_reason"] = "Flagged for human review"
         hr_path = os.path.join(out, "human_review_terms.csv")
         hr_df.to_csv(hr_path, index=False)
         logger.info(f"Written: {hr_path} ({len(hr_df)} rows)")
@@ -438,6 +448,10 @@ class InventoryBuilder:
                 })
 
             sources_df = pd.DataFrame(source_stats)
+            # Convert authoritative boolean to lowercase string for CSV
+            sources_df["authoritative"] = sources_df["authoritative"].map(
+                {True: "true", False: "false"}
+            )
         else:
             # Fallback: aggregate by term_count only
             source_counts = classified_df["source_name"].value_counts(dropna=False).reset_index()

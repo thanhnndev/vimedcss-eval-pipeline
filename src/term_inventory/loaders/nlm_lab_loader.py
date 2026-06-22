@@ -105,13 +105,16 @@ class NlmLabLoader(BaseLoader):
             logger.warning(f"Request error for query={query!r}: {e}")
             return []
 
+        # NLM API response: data is a list [match_count, field_names, ...data_rows]
         # data[0] = match count, data[3] = list of [code, name] pairs
         try:
-            results = data.get("data", [])
-            if len(results) < 4:
+            results = data  # Response is already a list, not a dict
+            if not isinstance(results, list) or len(results) < 4:
                 return []
             entries = results[3] or []
-            return [(entry[0], entry[1]) for entry in entries if len(entry) >= 2]
+            if not isinstance(entries, list):
+                return []
+            return [(entry[0], entry[1]) for entry in entries if isinstance(entry, list) and len(entry) >= 2]
         except (IndexError, TypeError) as e:
             logger.warning(f"Failed to parse NLM response for query={query!r}: {e}")
             return []
