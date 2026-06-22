@@ -158,8 +158,8 @@ class InventoryConfig(BaseModel):
     """
 
     icd10_backbone_path: str = Field(
-        default="data/icd10/icd10_dual_language.csv",
-        description="Path to the Phase 6a ICD-10 bilingual CSV output."
+        default="data/icd10/mock/icd10_dual_language.csv",
+        description="Path to the Phase 6a ICD-10 bilingual CSV output (mock path)."
     )
     output_dir: str = Field(
         default="data/terms",
