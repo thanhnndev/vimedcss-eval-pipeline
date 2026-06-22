@@ -156,3 +156,14 @@ None — no external service configuration required for mock mode. Live mode req
 _Phase: 06B-medical-term-inventory-extended_
 _Plan: 05_
 _Completed: 2026-06-22_
+## Self-Check: PASSED
+
+All files and commits verified:
+- src/term_inventory/builder.py — FOUND
+- src/term_inventory/reporter.py — FOUND
+- src/term_inventory/cli.py — FOUND
+- src/term_inventory/loaders/nlm_lab_loader.py — FOUND
+- .planning/phases/06B-medical-term-inventory-extended/06B-05-SUMMARY.md — FOUND
+- Commit d4c443a — FOUND (feat: implement InventoryBuilder orchestrator and reporter module)
+- Commit 5612a35 — FOUND (feat: wire CLI build-inventory to InventoryBuilder)
+- Commit ee435fd — FOUND (fix: boolean CSV conversion, NLM loader parsing, needs_human_review_reason fallback)

@@ -12,7 +12,7 @@ This roadmap details the phases to implement a complete pipeline evaluating medi
 - [x] **Phase 4: ASR Baseline Evaluation** — Run faster-whisper, compute WER/CER/CS metrics.
 - [x] **Phase 5: Vietnamese Report Generation** — Generate Vietnamese markdown report summarizing findings.
 - [x] **Phase 6a: ICD-10 Dual-Language Ingestion** — Ingest disease backbone EN/VI from KCB ICD-10 endpoint.
-- [ ] **Phase 6b: Medical Term Inventory Extended** — Build multi-source inventory (disease, drug, lab, procedure, etc.).
+- [x] **Phase 6b: Medical Term Inventory Extended** — Build multi-source inventory (disease, drug, lab, procedure, etc.). (completed 2026-06-22)
 - [ ] **Phase 6c: ViMedCSS Coverage Audit** — Audit ICD-10 and non-ICD coverage rates.
 - [ ] **Phase 6d: VietMed Feasibility Audit** — Assess VietMed dataset for real medical ASR expansion.
 - [ ] **Phase 6e: LLM Conversation Generation** — Generate structured doctor-patient conversations (JSONL).
@@ -166,11 +166,11 @@ Plans:
 
 **Wave 5** *(blocked on Wave 3 completion)*
 
-- [ ] 06B-05: InventoryBuilder orchestrator + 4 CSV exports + reporter
+- [x] 06B-05: InventoryBuilder orchestrator + 4 CSV exports + reporter
 
 **Wave 6** *(blocked on Wave 5 completion)*
 
-- [ ] 06B-06: Reporter completion + human_review_terms export + test scaffolding
+- [x] 06B-06: Reporter completion + human_review_terms export + test scaffolding
 
 ### Phase 6c: ViMedCSS Coverage Audit
 
