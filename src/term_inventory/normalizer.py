@@ -157,7 +157,17 @@ def normalize_term(raw: str, entity_type: Optional[str] = None) -> Tuple[str, st
     if s != nfc_before:
         transformations.append("nfc")
 
-    # Step 2: Greek-to-ASCII transliteration
+    # Step 2: Unit suffix normalization — BEFORE Greek-to-ASCII to prevent
+    # Greek mu (μ, U+03BC) from becoming "mu" before µg→mcg substitution.
+    # Multi-char unit suffixes are handled first (longer match strategy).
+    s_unit = s
+    for unit_from, unit_to in sorted(UNIT_SUFFIX_NORM.items(), key=lambda x: -len(x[0])):
+        pattern = re.escape(unit_from) + r"(?=\s|$|$)"
+        s = re.sub(pattern, unit_to, s, flags=re.IGNORECASE)
+    if s != s_unit:
+        transformations.append("unit_normalization")
+
+    # Step 3: Greek-to-ASCII transliteration
     # Replace all Greek characters (longest match strategy not needed since
     # GREEK_TO_ASCII maps individual characters)
     s_greek = s
@@ -166,21 +176,11 @@ def normalize_term(raw: str, entity_type: Optional[str] = None) -> Tuple[str, st
     if s != s_greek:
         transformations.append("greek_to_ascii")
 
-    # Step 3: Case folding
+    # Step 4: Case folding
     s_lower = s.lower()
     if s_lower != s:
         transformations.append("case_fold")
     s = s_lower
-
-    # Step 4: Unit suffix normalization
-    # Handle multi-char unit suffixes first (longer match)
-    s_unit = s
-    for unit_from, unit_to in sorted(UNIT_SUFFIX_NORM.items(), key=lambda x: -len(x[0])):
-        # Match at word boundary (end of string or followed by space/end)
-        pattern = re.escape(unit_from) + r"(?=\s|$|$)"
-        s = re.sub(pattern, unit_to, s, flags=re.IGNORECASE)
-    if s != s_unit:
-        transformations.append("unit_normalization")
 
     # Step 5: Punctuation stripping (preserve internal hyphens for medical terms)
     # Strip leading/trailing punctuation but keep internal hyphens and apostrophes
