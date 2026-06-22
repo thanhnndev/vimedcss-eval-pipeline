@@ -121,7 +121,15 @@ Plans:
   3. Every term has `entity_type` and `medical_domain` labels.
   4. LLM-generated candidates flagged as `not_verified`.
   5. Files: `data/terms/medical_term_inventory.csv`, `term_sources.csv`, `term_normalization_map.csv`, `human_review_terms.csv`.
-**Plans**: (not yet planned)
+**Plans**: 6 plans
+
+Plans:
+- [ ] 06B-01: Schema + CLI skeleton + ICD-10 backbone loader + RxNorm loader
+- [ ] 06B-02: Normalization pipeline + Greek-to-ASCII + term_normalization_map.csv
+- [ ] 06B-03: Supplementary loaders (NLM lab, openFDA device, abbreviations, ViMedCSS seed)
+- [ ] 06B-04: LLM classifier for non-authoritative terms with provenance flagging
+- [ ] 06B-05: InventoryBuilder orchestrator + 4 CSV exports + reporter
+- [ ] 06B-06: Reporter completion + human_review_terms export + test scaffolding
 
 ### Phase 6c: ViMedCSS Coverage Audit
 **Goal**: Measure how much of ViMedCSS CS term coverage is explained by ICD-10 diseases and supplementary medical lexicons.
