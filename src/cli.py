@@ -61,6 +61,15 @@ def main():
     report_parser.add_argument("--output-dir", type=str, default=None, help="Override output directory (default: outputs/reports)")
     report_parser.add_argument("--limit", type=int, default=None, help="Limit number of sections for preview/testing")
 
+    # Phase 6b: Build medical term inventory
+    from src.term_inventory.cli import build_arg_parser as _build_inv_parser, run_build_inventory as _run_inv
+    inv_parser = subparsers.add_parser("build-inventory", help="Build multi-source medical term inventory (Phase 6b)")
+    inv_parser.add_argument("--mock", action="store_true", help="Use mock/small seed lists (smoke test mode)")
+    inv_parser.add_argument("--full", action="store_true", help="Use full seed lists from config (default)")
+    inv_parser.add_argument("--output-dir", type=str, default=None, help="Override output directory")
+    inv_parser.add_argument("--limit", type=int, default=None, help="Limit number of terms per source")
+    inv_parser.add_argument("--config", type=str, default="configs/term_inventory.yaml", help="Path to term_inventory.yaml")
+
     args = parser.parse_args()
     
     if not args.command:
@@ -233,6 +242,16 @@ def main():
             sys.exit(1)
         except Exception as e:
             logger.error(f"Generate report failed: {e}")
+            sys.exit(1)
+
+    elif args.command == "build-inventory":
+        logger.info("Starting medical term inventory build (Phase 6b)...")
+        try:
+            from src.term_inventory.cli import run_build_inventory
+            run_build_inventory(args)
+            logger.info("Build-inventory completed successfully!")
+        except Exception as e:
+            logger.error(f"Build-inventory failed: {e}")
             sys.exit(1)
 
 if __name__ == "__main__":
