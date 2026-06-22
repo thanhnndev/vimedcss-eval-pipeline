@@ -103,28 +103,27 @@ class TestMedicalTermClassifierNonAuthoritative:
         """Non-authoritative terms (vimedcss_seed, nlm_lab, abbreviation_list) are sent to LLM.
         Authoritative terms (rxnorm, icd10, openfda) are preserved as-is.
         """
-        classifier = MedicalTermClassifier(mock_config)
-        classifier._mock_mode = True
+        classifier = MedicalTermClassifier(mock_config, mock=True)
 
         result_df = classifier.classify(mixed_source_df)
 
         # Authoritative terms should retain their entity_type
         rxnorm_row = result_df[result_df["source_name"] == TermSource.RXNORM].iloc[0]
         assert rxnorm_row["entity_type"] == EntityType.DRUG
-        assert rxnorm_row["llm_generated_candidate"] is False
+        assert rxnorm_row["llm_generated_candidate"] == False
 
         icd10_row = result_df[result_df["source_name"] == TermSource.ICD10].iloc[0]
         assert icd10_row["entity_type"] == EntityType.DISEASE
-        assert icd10_row["llm_generated_candidate"] is False
+        assert not icd10_row["llm_generated_candidate"]
 
         openfda_row = result_df[result_df["source_name"] == TermSource.OPENFDA].iloc[0]
         assert openfda_row["entity_type"] == EntityType.DEVICE
-        assert openfda_row["llm_generated_candidate"] is False
+        assert not openfda_row["llm_generated_candidate"]
 
         # Non-authoritative terms should have been classified
         vimedcss_row = result_df[result_df["source_name"] == TermSource.VIMEDCSS_SEED].iloc[0]
         assert vimedcss_row["entity_type"] != EntityType.UNKNOWN
-        assert vimedcss_row["llm_generated_candidate"] is True
+        assert vimedcss_row["llm_generated_candidate"] == True
         assert vimedcss_row["review_status"] == ReviewStatus.NOT_VERIFIED
 
     def test_authoritative_terms_preserved(self, mock_config):
@@ -162,8 +161,7 @@ class TestMedicalTermClassifierNonAuthoritative:
             },
         ])
 
-        classifier = MedicalTermClassifier(mock_config)
-        classifier._mock_mode = True
+        classifier = MedicalTermClassifier(mock_config, mock=True)
         result_df = classifier.classify(df)
 
         assert result_df.iloc[0]["entity_type"] == EntityType.DISEASE
@@ -186,12 +184,11 @@ class TestMedicalTermClassifierNonAuthoritative:
             },
         ])
 
-        classifier = MedicalTermClassifier(mock_config)
-        classifier._mock_mode = True
+        classifier = MedicalTermClassifier(mock_config, mock=True)
         result_df = classifier.classify(df)
 
         row = result_df.iloc[0]
-        assert row["llm_generated_candidate"] is True
+        assert row["llm_generated_candidate"] == True
         assert row["review_status"] == ReviewStatus.NOT_VERIFIED
 
     def test_confidence_threshold_review(self, mock_config):
@@ -221,8 +218,7 @@ class TestMedicalTermClassifierNonAuthoritative:
             },
         ])
 
-        classifier = MedicalTermClassifier(mock_config)
-        classifier._mock_mode = True
+        classifier = MedicalTermClassifier(mock_config, mock=True)
         result_df = classifier.classify(df)
 
         # Unknown/garbage terms get low confidence
@@ -230,9 +226,9 @@ class TestMedicalTermClassifierNonAuthoritative:
         diabetes_row = result_df[result_df["term_id"] == "term_c2"].iloc[0]
 
         # xyz123 is not recognized → low confidence → needs_human_review=True
-        assert xyz_row["needs_human_review"] is True
+        assert xyz_row["needs_human_review"] == True
         # diabetes is recognized → high confidence → needs_human_review=False
-        assert diabetes_row["needs_human_review"] is False
+        assert diabetes_row["needs_human_review"] == False
 
     def test_skip_when_already_classified(self, mock_config):
         """Non-authoritative terms with entity_type already set still get classified
@@ -250,13 +246,12 @@ class TestMedicalTermClassifierNonAuthoritative:
             },
         ])
 
-        classifier = MedicalTermClassifier(mock_config)
-        classifier._mock_mode = True
+        classifier = MedicalTermClassifier(mock_config, mock=True)
         result_df = classifier.classify(df)
 
         row = result_df.iloc[0]
         # Should still classify and fill in medical_domain
-        assert row["llm_generated_candidate"] is True
+        assert row["llm_generated_candidate"] == True
         assert row["medical_domain"] is not None
 
     def test_batch_classification_batching(self, mock_config):
@@ -276,8 +271,7 @@ class TestMedicalTermClassifierNonAuthoritative:
             for i, t in enumerate(terms)
         ])
 
-        classifier = MedicalTermClassifier(mock_config)
-        classifier._mock_mode = True
+        classifier = MedicalTermClassifier(mock_config, mock=True)
         # Patch _classify_batch to count calls
         original_batch = classifier._classify_batch
         batch_calls = []
@@ -323,8 +317,7 @@ class TestMedicalTermClassifierAudit:
             },
         ])
 
-        classifier = MedicalTermClassifier(mock_config)
-        classifier._mock_mode = True
+        classifier = MedicalTermClassifier(mock_config, mock=True)
         classifier.classify(df)
 
         audit_path = tmp_path / "logs" / "term_inventory_classification_audit.jsonl"

@@ -202,3 +202,54 @@ class InventoryConfig(BaseModel):
         default_factory=lambda: ["metformin", "insulin", "aspirin"],
         description="Subset of rxnorm_drug_list used in --mock smoke test mode."
     )
+
+
+class InventoryClassificationItem(BaseModel):
+    """Classification result for a single term from the LLM.
+
+    Used by MedicalTermClassifier to parse OpenAI structured output responses.
+    """
+    term_original: str = Field(
+        ...,
+        description="Original term as submitted to the LLM."
+    )
+    entity_type: EntityType = Field(
+        ...,
+        description="FR2-04 entity type: disease, drug, lab_test, procedure, anatomy, symptom, abbreviation, hormone, biomarker, pathogen, device, unit, dosage, unknown."
+    )
+    medical_domain: str = Field(
+        ...,
+        description="Medical domain: Medical Sciences, Pathology & Pathogens, Treatments, Nutrition, Diagnostics, or unknown."
+    )
+    confidence: float = Field(
+        ...,
+        ge=0.0,
+        le=1.0,
+        description="LLM confidence score between 0.0 and 1.0."
+    )
+    needs_human_review: bool = Field(
+        ...,
+        description="True if confidence is below threshold or classification is ambiguous."
+    )
+    evidence: Optional[str] = Field(
+        None,
+        description="Brief reasoning or context for the classification."
+    )
+    uncertainty_reason: Optional[str] = Field(
+        None,
+        description="Explanation of why confidence is low or classification is uncertain."
+    )
+
+
+class InventoryClassificationBatchResponse(BaseModel):
+    """OpenAI structured output schema for batch term classification.
+
+    Returned by the LLM for a batch of terms sent to MedicalTermClassifier.
+    """
+    items: List[InventoryClassificationItem] = Field(
+        default_factory=list,
+        description="List of classification results, one per input term."
+    )
+
+
+InventoryClassificationBatchResponse.model_rebuild()

@@ -10,6 +10,8 @@ Usage:
 """
 from src.term_inventory.schemas import (
     EntityType,
+    InventoryClassificationBatchResponse,
+    InventoryClassificationItem,
     InventoryConfig,
     MedicalTermRecord,
     Phase2ToFr2EntityTypeMap,
@@ -25,5 +27,7 @@ __all__ = [
     "MedicalTermRecord",
     "InventoryConfig",
     "Phase2ToFr2EntityTypeMap",
+    "InventoryClassificationItem",
+    "InventoryClassificationBatchResponse",
     "BaseLoader",
 ]
