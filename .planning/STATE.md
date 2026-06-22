@@ -4,8 +4,8 @@ milestone: v1.1
 milestone_name: VietMedVoice Phase 2 Enhancement
 status: executing
 stopped_at: All pipelines executed, outputs generated. GSD-codebase gaps resolved.
-last_updated: "2026-06-22T03:17:16.396Z"
-last_activity: 2026-06-22 -- Phase 6b planning complete
+last_updated: "2026-06-22T03:19:33.024Z"
+last_activity: 2026-06-22 -- Phase 06B execution started
 progress:
   total_phases: 17
   completed_phases: 1
@@ -21,14 +21,14 @@ progress:
 See: .planning/PROJECT.md (updated 2026-06-16)
 
 **Core value:** Accurate, traceable medical term coverage analysis and ASR error taxonomy for English/Vietnamese code-switching data to guide future dataset construction.
-**Current focus:** Phase 06A — icd-10-dual-language-ingestion
+**Current focus:** Phase 06B — medical-term-inventory-extended
 
 ## Current Position
 
-Phase: 06A (icd-10-dual-language-ingestion) — EXECUTING
-Plan: 1 of 1
-Status: Ready to execute
-Last activity: 2026-06-22 -- Phase 6b planning complete
+Phase: 06B (medical-term-inventory-extended) — EXECUTING
+Plan: 1 of 6
+Status: Executing Phase 06B
+Last activity: 2026-06-22 -- Phase 06B execution started
 
 ## Performance Metrics
 
