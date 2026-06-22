@@ -334,39 +334,50 @@ def deduplicate_within_entity_type(
             kept_rows.append(group.iloc[0].to_dict())
             continue
 
-        # Multiple terms with same entity_type + normalized form → conflict resolution
+        # Conflict resolution: verified sources win; if both verified, prefer by authority
         group = group.reset_index(drop=True)
 
-        # Prefer verified over non-verified
-        if "review_status" in group.columns:
-            verified_mask = group["review_status"] == ReviewStatus.VERIFIED.value
-            if verified_mask.any():
-                group = group[verified_mask]
+        verified = group[group["review_status"] == ReviewStatus.VERIFIED.value]
+        non_verified = group[group["review_status"] != ReviewStatus.VERIFIED.value]
 
-        # Among verified sources, prefer by authority order
-        if "source_name" in group.columns:
+        if len(verified) > 0:
+            # One of the verified sources wins
+            verified = verified.copy()
+            verified["_authority_rank"] = verified["source_name"].apply(_source_authority)
+            winner = verified.sort_values("_authority_rank").iloc[0]
+            losers = pd.concat([non_verified, verified.drop(winner.name)])
+        else:
+            # No verified source — pick highest-authority non-verified
             group = group.copy()
             group["_authority_rank"] = group["source_name"].apply(_source_authority)
-            group = group.sort_values("_authority_rank").reset_index(drop=True)
+            winner = group.sort_values("_authority_rank").iloc[0]
+            losers = group.drop(winner.name)
 
-        # Keep the first (most authoritative) row
-        canonical = group.iloc[0]
-        kept_rows.append(canonical.to_dict())
+        kept_rows.append(winner.to_dict())
 
-        # Record duplicates
-        for i in range(1, len(group)):
-            dup_row = group.iloc[i]
+        # Record the canonical entry itself in the duplicate map
+        # (so the map tracks who won and who lost for each normalized-form group)
+        # NO — skip canonical self-reference; duplicate_map tracks REMOVED terms only
+        # per plan verification: `assert len(dmap) == 1` (one duplicate removed)
+
+        # Record each duplicate that was removed
+        for _, dup_row in losers.iterrows():
+            is_verified = dup_row.get("review_status") == ReviewStatus.VERIFIED.value
+            reason_suffix = (
+                "verified but lower authority"
+                if is_verified
+                else f"not verified (review_status={dup_row.get('review_status', '')})"
+            )
             dup_map_rows.append(
                 {
-                    "canonical_term_id": canonical.get("term_id", None),
+                    "canonical_term_id": winner.get("term_id", None),
                     "duplicate_term_id": dup_row.get("term_id", None),
                     "reason": (
-                        f"normalized match within entity_type={entity_type_val}: "
-                        f"{dup_row.get('term_original', '')!r} → {normalized_val!r} "
-                        f"(kept: {canonical.get('source_name', '')}, "
-                        f"removed: {dup_row.get('source_name', '')})"
+                        f"deduplicated: entity_type={entity_type_val}, "
+                        f"normalized={normalized_val!r}, "
+                        f"removed source={dup_row.get('source_name', '')} — {reason_suffix}"
                     ),
-                    "source_kept": canonical.get("source_name", ""),
+                    "source_kept": winner.get("source_name", ""),
                     "source_removed": dup_row.get("source_name", ""),
                     "entity_type": entity_type_val,
                     "normalized_form": normalized_val,
@@ -375,9 +386,7 @@ def deduplicate_within_entity_type(
 
     deduplicated_df = pd.DataFrame(kept_rows)
 
-    if len(df) > 0:
-        dedup_rate = len(dup_map_rows) / len(df)
-
+    dedup_rate = len(dup_map_rows) / max(len(df), 1)
     if dedup_rate > 0.30:
         import logging
         logging.warning(
@@ -387,7 +396,7 @@ def deduplicate_within_entity_type(
         )
 
     import logging
-    n_entity_types = df["entity_type"].nunique() if "entity_type" in df.columns else 0
+    n_entity_types = df["entity_type"].nunique() if len(df) > 0 and "entity_type" in df.columns else 0
     logging.info(
         f"Deduplicated {len(dup_map_rows)} duplicate terms "
         f"across {n_entity_types} entity types. "
