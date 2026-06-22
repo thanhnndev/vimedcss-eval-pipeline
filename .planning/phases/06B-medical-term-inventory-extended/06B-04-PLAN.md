@@ -107,7 +107,7 @@ Write test cases for `MedicalTermClassifier`:
 Run tests initially — expect FAIL (classifier not yet implemented).
 </action>
   <verify>
-cd /home/thanhnndev/develop/projects/vimedcss-eval-pipeline && python -m pytest tests/test_term_inventory_classifier.py -v --tb=short 2>&1 | tail -20
+cd /home/thanhnndev/develop/projects/vimedcss-eval-pipeline && python -m pytest tests/test_term_inventory_classifier.py -v --collect-only 2>&1 | head -20 && python -m pytest tests/test_term_inventory_classifier.py -v --tb=short 2>&1 | tail -20
 </verify>
   <done>Test file created, tests fail (classifier not yet implemented). RED phase complete.</done>
 </task>

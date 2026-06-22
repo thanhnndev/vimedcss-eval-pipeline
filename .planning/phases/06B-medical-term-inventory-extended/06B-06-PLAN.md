@@ -2,11 +2,9 @@
 phase: "06B"
 plan: "06"
 type: execute
-wave: 4
-depends_on: ["06B-02", "06B-03", "06B-04"]
+wave: 6
+depends_on: ["06B-02", "06B-03", "06B-04", "06B-05"]
 files_modified:
-  - "src/term_inventory/reporter.py"
-  - "src/term_inventory/builder.py"
   - "tests/test_term_inventory_normalizer.py"
   - "tests/test_term_inventory_loaders.py"
 autonomous: true
@@ -17,10 +15,10 @@ requirements:
 ---
 
 <objective>
-Complete the reporter module, finalize the human_review_terms.csv export logic (FR2-06), wire term_sources.csv generation into the builder, and create test scaffolding for the normalizer and loaders. This is the final plan — when it completes, all four required output files are generated and tested.
+Create test scaffolding for the normalizer and loaders. This plan completes after Plan 05 (builder/reporter integration) and provides the test coverage that validates the pipeline outputs. When this plan completes, all four required output files are generated and tested.
 
-Purpose: The reporter delivers the human-readable summary; human_review_terms.csv is the gate for data quality; term_sources.csv provides the provenance audit trail.
-Output: `reports/term_inventory_report.md`, `data/terms/human_review_terms.csv`, `data/terms/term_sources.csv`, test files for normalizer and loaders.
+Purpose: Comprehensive tests ensure the term inventory pipeline remains reliable as changes are made.
+Output: `tests/test_term_inventory_normalizer.py`, `tests/test_term_inventory_loaders.py`.
 </objective>
 
 <execution_context>
@@ -28,11 +26,8 @@ Output: `reports/term_inventory_report.md`, `data/terms/human_review_terms.csv`,
 </execution_context>
 
 <context>
-@src/term_inventory/reporter.py
-@src/term_inventory/builder.py
-@.planning/phases/06B-medical-term-inventory-extended/06B-02-PLAN.md
-@.planning/phases/06B-medical-term-inventory-extended/06B-03-PLAN.md
 @.planning/phases/06B-medical-term-inventory-extended/06B-05-PLAN.md
+@tests/test_auditor.py
 
 ## Output File Schemas (FR2-06)
 
@@ -62,142 +57,7 @@ The report should include:
 <tasks>
 
 <task type="auto">
-  <name>Task 1: Complete reporter and human_review_terms export</name>
-  <files>
-    src/term_inventory/reporter.py
-    src/term_inventory/builder.py
-  </files>
-  <action>
-Complete `src/term_inventory/reporter.py` with full implementation:
-
-```python
-def generate_term_inventory_report(df: pd.DataFrame, norm_map: pd.DataFrame) -> Dict[str, Any]:
-    """Generate term inventory report with Vietnamese narrative."""
-```
-
-Implement these sections:
-
-1. **Statistics computation**:
-   - `total_terms = len(df)`
-   - `authoritative_count = (df["source_name"].isin(["icd10", "rxnorm", "openfda"])).sum()`
-   - `llm_candidate_count = df["llm_generated_candidate"].sum()`
-   - `review_queue_count = ((df["review_status"] == "needs_review") | (df["llm_generated_candidate"] == True)).sum()`
-   - `normalization_map_count = len(norm_map)`
-   - `entity_type_dist = df["entity_type"].value_counts().to_dict()`
-   - `source_dist = df["source_name"].value_counts().to_dict()`
-
-2. **term_sources.csv generation**:
-   ```python
-   source_rows = []
-   for source_name, grp in df.groupby("source_name"):
-       source_rows.append({
-           "source_name": source_name,
-           "source_url": grp["source_url"].iloc[0] if pd.notna(grp["source_url"].iloc[0]) else "",
-           "source_license": get_source_license(source_name),
-           "entity_types_provided": ";".join(sorted(grp["entity_type"].unique())),
-           "term_count": len(grp),
-           "authoritative": source_name in {"icd10", "rxnorm", "openfda"},
-       })
-   sources_df = pd.DataFrame(source_rows)
-   sources_df.to_csv(os.path.join(config.output_dir, "term_sources.csv"), index=False)
-   ```
-
-3. **human_review_terms.csv generation**:
-   ```python
-   review_df = df[
-       (df["review_status"] == "needs_review") |
-       (df["review_status"] == "not_verified") |
-       (df["llm_generated_candidate"] == True)
-   ][["term_id", "term_original", "term_normalized", "entity_type",
-       "medical_domain", "source_name", "review_status",
-       "llm_generated_candidate"]].copy()
-   review_df["needs_human_review_reason"] = review_df.apply(
-       lambda r: _get_review_reason(r), axis=1
-   )
-   review_df.to_csv(os.path.join(config.output_dir, "human_review_terms.csv"), index=False)
-   ```
-
-4. **`_get_review_reason(row) -> str`**:
-   - If `llm_generated_candidate == True`: "LLM-generated candidate — requires external source verification"
-   - If `review_status == needs_review`: "Confidence below threshold or flagged by LLM"
-   - If `review_status == not_verified`: "Non-authoritative source — manual review required"
-   - Otherwise: "Requires verification"
-
-5. **`get_source_license(source_name) -> str`**:
-   - icd10 → "Public Domain (WHO)"
-   - rxnorm → "Public Domain (NLM)"
-   - openfda → "Public Domain (FDA)"
-   - nlm_lab → "Public Domain (NLM)"
-   - abbreviation_list → "Project Internal"
-   - vimedcss_seed → "ViMedCSS Dataset License"
-   - llm_generated → "N/A (generated)"
-   - unknown → "Unknown"
-
-6. **Report markdown generation** — produce Vietnamese narrative with:
-   - Summary statistics in table format
-   - Entity type distribution bar chart description
-   - Source distribution table
-   - Verification status pie description
-   - Recommendations for Phase 6c coverage audit
-
-Return stats dict. Log report path.
-
----
-
-Update `src/term_inventory/builder.py` `_export_csvs()` to call reporter:
-```python
-def _export_csvs(self, df, norm_map, dedup_map):
-    # medical_term_inventory.csv
-    df.to_csv(os.path.join(self.config.output_dir, "medical_term_inventory.csv"), index=False)
-    
-    # term_normalization_map.csv
-    norm_map.to_csv(os.path.join(self.config.output_dir, "term_normalization_map.csv"), index=False)
-    
-    # term_sources.csv + human_review_terms.csv via reporter
-    stats = generate_term_inventory_report(df, norm_map)
-    
-    logger.info(f"Exported 4 CSV files to {self.config.output_dir}")
-```
-
-Make sure `generate_term_inventory_report` is called with the config output_dir so it can write term_sources.csv and human_review_terms.csv.
-</action>
-  <verify>
-python -c "
-from src.term_inventory.reporter import generate_term_inventory_report, _get_review_reason, get_source_license
-import pandas as pd
-
-# Test _get_review_reason
-row = pd.Series({'llm_generated_candidate': True, 'review_status': 'not_verified'})
-reason = _get_review_reason(row)
-assert 'LLM-generated' in reason, f'Got: {reason}'
-print('_get_review_reason test passed')
-
-# Test get_source_license
-assert get_source_license('icd10') == 'Public Domain (WHO)'
-assert get_source_license('rxnorm') == 'Public Domain (NLM)'
-assert get_source_license('openfda') == 'Public Domain (FDA)'
-print('get_source_license test passed')
-
-# Test generate_term_inventory_report
-df = pd.DataFrame([
-    {'term_id': 't1', 'term_original': 'metformin', 'entity_type': 'drug', 'source_name': 'rxnorm', 'review_status': 'verified', 'llm_generated_candidate': False},
-    {'term_id': 't2', 'term_original': 'β-blocker', 'entity_type': 'drug', 'source_name': 'llm_generated', 'review_status': 'not_verified', 'llm_generated_candidate': True},
-])
-norm_map = pd.DataFrame([{'raw_form': 'β-blocker', 'normalized_form': 'beta-blocker'}])
-stats = generate_term_inventory_report(df, norm_map)
-assert stats['total_terms'] == 2
-assert stats['authoritative_count'] == 1
-assert stats['llm_candidate_count'] == 1
-assert stats['review_queue_count'] == 1
-print('generate_term_inventory_report test passed')
-print(f'Stats: {stats}')
-"
-</verify>
-  <done>Reporter generates term_sources.csv and human_review_terms.csv. All FR2-06 output files complete. Vietnamese narrative report generated.</done>
-</task>
-
-<task type="auto">
-  <name>Task 2: Create test scaffolding for normalizer and loaders</name>
+  <name>Task 1: Create test scaffolding for normalizer and loaders</name>
   <files>
     tests/test_term_inventory_normalizer.py
     tests/test_term_inventory_loaders.py
@@ -310,40 +170,12 @@ cd /home/thanhnndev/develop/projects/vimedcss-eval-pipeline && python -m pytest 
 </tasks>
 
 <verification>
-python -c "
-from src.term_inventory.reporter import generate_term_inventory_report, get_source_license
-from src.term_inventory.builder import InventoryBuilder
-from src.term_inventory.schemas import InventoryConfig
-import pandas as pd
-
-# Final integration check
-config = InventoryConfig()
-builder = InventoryBuilder(config)
-
-# Verify builder has all methods
-assert hasattr(builder, 'build')
-assert hasattr(builder, '_export_csvs')
-print('Builder final check: OK')
-
-# Verify reporter
-df = pd.DataFrame([{'term_id': 't1', 'term_original': 'metformin', 'term_normalized': 'metformin', 'entity_type': 'drug', 'medical_domain': 'unknown', 'source_name': 'rxnorm', 'source_url': 'https://rxnav.nlm.nih.gov', 'review_status': 'verified', 'llm_generated_candidate': False}])
-norm = pd.DataFrame()
-stats = generate_term_inventory_report(df, norm)
-assert stats['total_terms'] == 1
-assert stats['authoritative_count'] == 1
-print('Reporter final check: OK')
-print('All FR2-06 output files validated')
-"
+cd /home/thanhnndev/develop/projects/vimedcss-eval-pipeline && python -m pytest tests/test_term_inventory_normalizer.py tests/test_term_inventory_loaders.py -v --tb=short 2>&1 | tail -30
 </verification>
 
 <success_criteria>
-- generate_term_inventory_report() writes term_sources.csv and human_review_terms.csv to config.output_dir
-- term_sources.csv has columns: source_name, source_url, source_license, entity_types_provided, term_count, authoritative
-- human_review_terms.csv has columns: term_id, term_original, term_normalized, entity_type, medical_domain, source_name, review_status, llm_generated_candidate, needs_human_review_reason
-- All LLM-generated candidates appear in human_review_terms.csv
-- Reporter generates Vietnamese narrative in reports/term_inventory_report.md
-- tests/test_term_inventory_normalizer.py created with ≥8 test cases
-- tests/test_term_inventory_loaders.py created with ≥6 test cases
+- tests/test_term_inventory_normalizer.py created with ≥8 test cases covering Greek-to-ASCII, NFC, case folding, unit normalization, deduplication
+- tests/test_term_inventory_loaders.py created with ≥6 test cases covering BaseLoader interface, column requirements, abbreviation expansions, file missing errors
 - All pytest tests pass
 </success_criteria>
 

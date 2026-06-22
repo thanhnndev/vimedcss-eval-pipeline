@@ -2,14 +2,15 @@
 phase: "06B"
 plan: "05"
 type: execute
-wave: 4
+wave: 5
 depends_on: ["06B-02", "06B-03", "06B-04"]
 files_modified:
   - "src/term_inventory/builder.py"
   - "src/term_inventory/cli.py"
   - "src/term_inventory/reporter.py"
-autonomous: true
+autonomous: false
 requirements:
+  - "FR2-02"
   - "FR2-03"
   - "FR2-04"
   - "FR2-05"
@@ -247,8 +248,8 @@ python -c "from src.term_inventory.reporter import generate_term_inventory_repor
 
 <task type="auto">
   <name>Task 3: Wire CLI build-inventory to InventoryBuilder</name>
-  <files>src/term_inventory/cli.py</files>
-  <read_first>src/term_inventory/builder.py</read_first>
+  <files>src/term_inventory/cli.py, src/cli.py</files>
+  <read_first>src/cli.py</read_first>
   <action>
 Update `src/term_inventory/cli.py` `run_build_inventory()`:
 
@@ -293,29 +294,20 @@ def run_build_inventory(args) -> None:
 
 Also update `build_arg_parser()` if needed to add the `--limit` argument.
 
-Add the subcommand registration to `src/cli.py`:
-```python
-# Add this inside the main CLI argument parser setup in src/cli.py
-from src.term_inventory.cli import register_build_inventory_parser
+Add the subcommand registration to `src/cli.py`. Following the existing `elif args.command == "..."` pattern (lines 76-136), add the following `elif` block after the `eval-asr` block (after line 211) and before the `generate-report` block (line 213):
 
-def main():
-    parser = argparse.ArgumentParser(...)
-    subparsers = parser.add_subparsers(dest="command", help="...")
-    
-    # Existing subcommands...
-    
-    # Add term inventory subcommand
-    build_inv_subparser = subparsers.add_parser(
-        "build-inventory",
-        help="Build medical term inventory from ICD-10 + supplementary lexicons"
-    )
-    build_inv_subparser.add_argument("--mock", action="store_true", ...)
-    build_inv_subparser.add_argument("--full", action="store_true", ...)
-    build_inv_subparser.add_argument("--output-dir", type=str, ...)
-    build_inv_subparser.add_argument("--limit", type=int, ...)
+```python
+    elif args.command == "build-inventory":
+        logger.info("Starting medical term inventory build...")
+        try:
+            from src.term_inventory.cli import run_build_inventory
+            run_build_inventory(args)
+        except Exception as e:
+            logger.error(f"Build inventory failed: {e}")
+            sys.exit(1)
 ```
 
-Follow the existing CLI registration pattern in `src/cli.py`.
+This follows the exact pattern of every other command in `src/cli.py`: logger.info → try/except → import → call function → logger.error on failure → sys.exit(1).
 </action>
   <verify>
 python -c "
@@ -326,9 +318,34 @@ args = parser.parse_args(['build-inventory', '--mock', '--limit', '5'])
 print('CLI args parsed OK:', args)
 print('Mock:', args.mock)
 print('Limit:', args.limit)
+" && python -c "
+import ast
+# Verify the elif block pattern in src/cli.py
+with open('src/cli.py', 'r') as f:
+    content = f.read()
+assert 'elif args.command == \"build-inventory\":' in content, 'CLI registration missing'
+print('CLI registration verified')
 "
 </verify>
-  <done>CLI run_build_inventory() wires to InventoryBuilder.build(). Full pipeline executable with build-inventory --mock --limit 5.</done>
+  <done>CLI run_build_inventory() wires to InventoryBuilder.build(). Full pipeline executable with build-inventory --mock --limit 5. Exact elif pattern in src/cli.py.</done>
+</task>
+
+</tasks>
+
+<task type="checkpoint:human-verify" gate="blocking">
+  <name>Task 4: Verify end-to-end integration of InventoryBuilder output</name>
+  <what-built>Mock pipeline run producing all four output CSV files</what-built>
+  <how-to-verify>
+    1. Run: `python -m src.cli build-inventory --mock --limit 5`
+    2. Verify `data/terms/medical_term_inventory.csv` exists and contains >= 5 rows
+    3. Verify `data/terms/term_normalization_map.csv` exists (may be empty in mock mode)
+    4. Verify `data/terms/term_sources.csv` exists and has columns: source_name, term_count, authoritative
+    5. Verify `data/terms/human_review_terms.csv` exists
+    6. Verify `reports/term_inventory_report.md` exists and contains Vietnamese narrative
+    7. Run: `python -m pytest tests/test_term_inventory_normalizer.py tests/test_term_inventory_loaders.py -v --tb=short` and confirm all tests pass
+  </how-to-verify>
+  <resume-signal>Type "approved" or describe issues</resume-signal>
+  <done>All four output files exist, contain valid data, and pytest tests pass.</done>
 </task>
 
 </tasks>
