@@ -1,0 +1,72 @@
+# Phase 6b: Medical Term Inventory Extended
+# FR2 requirements — multi-source term inventory
+
+icd10_backbone_path: "data/icd10/mock/icd10_dual_language.csv"
+
+output_dir: "data/terms"
+log_dir: "logs"
+
+# RxNorm drug seed list (used by RxNormLoader)
+# These seed names are queried against NLM RxNorm REST API
+rxnorm_drug_list:
+  - metformin
+  - insulin
+  - aspirin
+  - amoxicillin
+  - ibuprofen
+  - paracetamol
+  - atorvastatin
+  - losartan
+  - amlodipine
+  - omeprazole
+  - lisinopril
+  - simvastatin
+  - warfarin
+  - clopidogrel
+  - levothyroxine
+  - prednisone
+  - hba1c
+  - cholesterol
+  - triglyceride
+
+# Mock mode drug list (small subset for smoke tests)
+rxnorm_drug_list_mock:
+  - metformin
+  - insulin
+  - aspirin
+
+# Manual abbreviation list (high-frequency CS medical abbreviations)
+abbreviation_list:
+  - ECG
+  - MRI
+  - CT
+  - CBC
+  - EEG
+  - ICU
+  - CPR
+  - IV
+  - IM
+  - BP
+  - HR
+  - WBC
+  - RBC
+  - CRP
+  - HbA1c
+  - eGFR
+  - PSA
+  - HDL
+  - LDL
+  - COPD
+  - UTI
+  - GERD
+  - HIV
+  - AIDS
+
+# openFDA device categories to query
+openfda_device_categories:
+  - "medical device"
+  - "diagnostic imaging device"
+  - "cardiac device"
+
+# LLM classification confidence threshold
+confidence_threshold: 0.80
