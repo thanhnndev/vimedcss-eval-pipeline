@@ -153,16 +153,16 @@ Plans:
 Plans:
 **Wave 1**
 
-- [ ] 06B-01: Schema + CLI skeleton + ICD-10 backbone loader + RxNorm loader
+- [x] 06B-01: Schema + CLI skeleton + ICD-10 backbone loader + RxNorm loader
 
 **Wave 2** *(blocked on Wave 1 completion)*
 
-- [ ] 06B-02: Normalization pipeline + Greek-to-ASCII + term_normalization_map.csv
-- [ ] 06B-03: Supplementary loaders (NLM lab, openFDA device, abbreviations, ViMedCSS seed)
+- [x] 06B-02: Normalization pipeline + Greek-to-ASCII + term_normalization_map.csv
+- [x] 06B-03: Supplementary loaders (NLM lab, openFDA device, abbreviations, ViMedCSS seed)
 
 **Wave 3** *(blocked on Wave 2 completion)*
 
-- [ ] 06B-04: LLM classifier for non-authoritative terms with provenance flagging
+- [x] 06B-04: LLM classifier for non-authoritative terms with provenance flagging
 
 **Wave 5** *(blocked on Wave 3 completion)*
 
