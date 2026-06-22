@@ -24,8 +24,8 @@ import yaml
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
 
 from src.shared.logging import setup_logger
-from src.term_inventory.loaders import Icd10BackboneLoader, RxNormLoader
 from src.term_inventory.schemas import InventoryConfig
+from src.term_inventory.builder import InventoryBuilder
 
 logger = setup_logger("term_inventory.cli")
 
@@ -109,80 +109,41 @@ def _load_config(config_path: str, use_mock: bool = False) -> InventoryConfig:
 
 
 def run_build_inventory(args: argparse.Namespace) -> None:
-    """Execute the inventory build pipeline.
+    """Execute the inventory build pipeline using InventoryBuilder.
 
     Args:
         args: parsed arguments from build_arg_parser()
     """
-    # Load config
+    # Load config with --mock overrides applied
     config = _load_config(args.config, use_mock=args.mock)
 
     # Override output dir from CLI if provided
-    output_dir = args.output_dir or config.output_dir
-    os.makedirs(output_dir, exist_ok=True)
+    if args.output_dir:
+        config.output_dir = args.output_dir
 
-    output_path = os.path.join(output_dir, "medical_term_inventory.csv")
+    # Create builder
+    builder = InventoryBuilder(config)
 
-    # Collect DataFrames from all loaders
-    all_dfs: list[dict] = []
-    sources_loaded = 0
+    # Run the full pipeline
+    stats = builder.build(mock=args.mock, limit=args.limit)
 
-    # --- ICD-10 Backbone ---
-    logger.info("Loading ICD-10 backbone...")
-    try:
-        icd10_loader = Icd10BackboneLoader(config)
-        icd10_df = icd10_loader.load()
-        if not icd10_df.empty:
-            if args.limit:
-                icd10_df = icd10_df.head(args.limit)
-            all_dfs.append({"source": "icd10", "count": len(icd10_df), "df": icd10_df})
-            sources_loaded += 1
-            logger.info(f"ICD-10: loaded {len(icd10_df)} disease terms")
-        else:
-            logger.warning("ICD-10 backbone returned 0 rows")
-    except FileNotFoundError as e:
-        logger.warning(f"ICD-10 backbone skipped: {e}")
-    except Exception as e:
-        logger.error(f"ICD-10 backbone failed: {e}")
-
-    # --- RxNorm Drug Loader ---
-    logger.info("Loading RxNorm drugs...")
-    try:
-        rxnorm_loader = RxNormLoader(config)
-        rxnorm_df = rxnorm_loader.load()
-        if not rxnorm_df.empty:
-            if args.limit:
-                rxnorm_df = rxnorm_df.head(args.limit)
-            all_dfs.append({"source": "rxnorm", "count": len(rxnorm_df), "df": rxnorm_df})
-            sources_loaded += 1
-            logger.info(f"RxNorm: loaded {len(rxnorm_df)} drug terms")
-        else:
-            logger.warning("RxNorm returned 0 rows (check network connectivity)")
-    except Exception as e:
-        logger.error(f"RxNorm loader failed: {e}")
-
-    # --- Concatenate and save ---
-    if not all_dfs:
-        logger.error("No data loaded from any source — inventory not written")
-        return
-
-    import pandas as pd
-    combined_df = pd.concat([item["df"] for item in all_dfs], ignore_index=True)
-
-    combined_df.to_csv(output_path, index=False)
-    total_terms = len(combined_df)
-
-    # Summary output
-    summary_lines = [
-        f"Loaded {total_terms} terms from {sources_loaded} source(s)",
-        f"Output: {output_path}",
-    ]
-    for item in all_dfs:
-        summary_lines.append(f"  - {item['source']}: {item['count']} terms")
-
-    logger.info("Build complete!")
-    for line in summary_lines:
-        print(line)
+    # Print summary table
+    print("\n" + "=" * 60)
+    print("Medical Term Inventory Build Complete")
+    print("=" * 60)
+    print(f"Total terms:          {stats['total_terms']:,}")
+    print(f"Authoritative:         {stats['authoritative_count']:,}")
+    print(f"LLM candidates:        {stats['llm_candidate_count']:,}")
+    print(f"Review queue:          {stats['review_queue_count']:,}")
+    print(f"Normalization map:     {stats['normalization_map_count']:,} transformations")
+    print(f"Elapsed:               {stats.get('elapsed_seconds', 'N/A')}s")
+    print("=" * 60)
+    print(f"Output directory:      {config.output_dir}/")
+    print(f"  - medical_term_inventory.csv")
+    print(f"  - term_normalization_map.csv")
+    print(f"  - human_review_terms.csv")
+    print(f"  - term_sources.csv")
+    print(f"Report:                reports/term_inventory_report.md")
 
 
 def main() -> None:
